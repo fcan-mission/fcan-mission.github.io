@@ -2241,19 +2241,8 @@ function puzzleHtml(step) {
   }
 
   if (step.puzzleType === "steel-grid") {
-    const rows = [
-      ["1", "", "キ", "③", "", "⑤", "", ""],
-      ["2", "①", "ン", "", "", "", "", ""],
-      ["3", "", "コ", "", "⑦", "", "", ""],
-      ["4", "④", "ウ", "", "", "", "", ""],
-      ["5", "", "②", "⑥", "", "", "", ""]
-    ];
     return `
       <div class="puzzle-panel steel-grid-panel">
-        <div class="steel-grid-guide">
-          <p>縦の骨組み</p>
-          <strong>テッキンコウジ</strong>
-        </div>
         <ol class="clue-list">
           <li>夏に食べたくなるウリ科の野菜</li>
           <li>お金を預けたり引き出したりできる金融機関</li>
@@ -2261,19 +2250,7 @@ function puzzleHtml(step) {
           <li>人や車が道を通ること</li>
           <li>トランプのババになるもの</li>
         </ol>
-        <div class="steel-crossword" aria-label="鉄筋工事の骨組み暗号表">
-          ${rows
-            .map(
-              (row) => `
-                <div class="steel-row">
-                  <b>${row[0]}→</b>
-                  ${row.slice(1).map((cell) => `<span>${escapeHtml(cell)}</span>`).join("")}
-                </div>
-              `
-            )
-            .join("")}
-        </div>
-        <div class="answer-runes" aria-hidden="true">①②③④⑤⑥⑦</div>
+        <img class="steel-grid-source-image" src="assets/puzzles/steel-grid-pdf.png" width="554" height="258" alt="PDF原図の、テッキンコウジを縦に入れた暗号の骨組み表" />
       </div>
     `;
   }

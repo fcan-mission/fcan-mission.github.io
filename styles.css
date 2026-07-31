@@ -1415,6 +1415,16 @@ img.mission-character {
   font-weight: 900;
 }
 
+.steel-grid-source-image {
+  display: block;
+  width: 100%;
+  max-width: 554px;
+  height: auto;
+  margin-inline: auto;
+  background: #fff;
+  border: 2px solid var(--ink);
+}
+
 .steel-crossword {
   display: grid;
   gap: 0;
