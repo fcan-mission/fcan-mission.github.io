@@ -1500,7 +1500,7 @@ function showStoryAccessDialog() {
 
 function verifyStoryAccess(form) {
   const password = new FormData(form).get("password")?.toString().trim();
-  if (password === "エフキャン") {
+  if (password === "fcan") {
     closeStoryAccessDialog();
     location.hash = "#story";
     return;
