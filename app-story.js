@@ -878,7 +878,7 @@ function registrationFormHtml(participant = {}) {
         <h2>作戦参加登録</h2>
         <p>運営が参加状況を把握し、イベントを改善するための参加登録です。</p>
       </div>
-      <label for="participant-name">名前またはニックネーム</label>
+      <label for="participant-name">ニックネーム</label>
       <input id="participant-name" name="name" autocomplete="nickname" required value="${escapeAttribute(participant.name || "")}" placeholder="例: はこだて太郎" />
       <label for="participant-grade">学年</label>
       <select id="participant-grade" name="grade">
@@ -1564,6 +1564,7 @@ function renderKaijuBattle(battleReady) {
         <p class="battle-action-text">${status === "hit" ? `正解！ ナゾゴラに${puzzle?.damage || 20}ダメージ。` : battleReady && !complete ? `ATTACK CODE ${battleIndex + 1} / ${kaijuBattlePuzzles.length}` : ""}</p>
       </div>
       ${puzzle ? kaijuBattlePuzzleHtml(puzzle, battleIndex, status) : ""}
+      ${status === "victory" ? kaijuCompletionRecordHtml() : ""}
       ${status === "victory" ? endingStoryHtml() : ""}
       <div class="battle-controls">
         ${battleReady && status === "ready" ? `<button class="button primary" type="button" data-action="start-kaiju-battle">怪獣討伐を開始する</button>` : ""}
@@ -1571,6 +1572,13 @@ function renderKaijuBattle(battleReady) {
         <a class="button ghost" href="#missions">企業一覧へ</a>
       </div>
     </section>`;
+}
+
+function kaijuCompletionRecordHtml() {
+  if (state.participant?.kaijuBattleCompletedAt) {
+    return `<aside class="final-brief is-clear"><p class="eyebrow dark">COMPLETION RECORDED</p><h2>討伐記録を保存しました</h2><p>${escapeHtml(state.participant.name || "参加者")}さんのニックネーム・メールアドレス・討伐完了時刻を運営用に記録しています。</p></aside>`;
+  }
+  return `<aside class="final-brief"><p class="eyebrow dark">SAVE YOUR RESULT</p><h2>討伐記録を残そう</h2><p>ニックネームとメールアドレスを登録すると、討伐完了を運営が記録できます。</p><a class="button primary" href="#profile">参加登録・ログインへ</a></aside>`;
 }
 
 function kaijuBattlePuzzleHtml(puzzle, index, status) {
@@ -1618,6 +1626,7 @@ function checkKaijuBattleAnswer(index, rawAnswer) {
   }
   state.steps.kaijuBattle = index + 1;
   saveState();
+  if (index + 1 >= kaijuBattlePuzzles.length) recordKaijuCompletion();
   battleState.lastHitPuzzle = puzzle;
   battleState.lastHitIndex = index;
   battleState.status = "hit";
@@ -1910,6 +1919,7 @@ function closeHeroUnlock() {
 
 async function saveParticipant(formData) {
   if (!currentUser || !db) throw new Error("ログインが必要です。");
+  const previousCompletion = state.participant?.kaijuBattleCompletedAt || null;
   state.participant = {
     id: currentUser.uid,
     name: formData.get("name")?.toString().trim() || "ゲスト",
@@ -1917,16 +1927,38 @@ async function saveParticipant(formData) {
     interests: formData.getAll("interests").map(String),
     createdAt: state.participant?.createdAt || new Date().toISOString(),
     updatedAt: new Date().toISOString(),
-    privacyConsent: formData.get("privacy-consent") === "on"
+    privacyConsent: formData.get("privacy-consent") === "on",
+    ...(previousCompletion ? { kaijuBattleCompletedAt: previousCompletion } : {})
   };
+  const completedKaijuBattle = getKaijuBattleIndex() >= kaijuBattlePuzzles.length;
+  if (completedKaijuBattle && !state.participant.kaijuBattleCompletedAt) {
+    state.participant.kaijuBattleCompletedAt = new Date().toISOString();
+  }
   await setDoc(doc(db, "participants", currentUser.uid), {
     ...state.participant,
     email: currentUser.email || "",
     progress: progressSnapshot(),
     createdAt: state.participant.createdAt,
-    updatedAt: serverTimestamp()
+    updatedAt: serverTimestamp(),
+    ...(completedKaijuBattle && !previousCompletion ? { kaijuBattleCompletedAt: serverTimestamp() } : {})
   }, { merge: true });
   localStorage.setItem(STORAGE_KEYS.participant, JSON.stringify(state.participant));
+}
+
+function recordKaijuCompletion() {
+  if (!currentUser || !db || !state.participant?.id || state.participant.kaijuBattleCompletedAt) return;
+  state.participant.kaijuBattleCompletedAt = new Date().toISOString();
+  localStorage.setItem(STORAGE_KEYS.participant, JSON.stringify(state.participant));
+  setDoc(doc(db, "participants", currentUser.uid), {
+    name: state.participant.name || "",
+    email: currentUser.email || "",
+    kaijuBattleCompletedAt: serverTimestamp(),
+    updatedAt: serverTimestamp()
+  }, { merge: true }).catch((error) => {
+    console.error("討伐記録を保存できませんでした。", error);
+    delete state.participant.kaijuBattleCompletedAt;
+    localStorage.setItem(STORAGE_KEYS.participant, JSON.stringify(state.participant));
+  });
 }
 
 function revealFinalHint(index) {
@@ -2097,7 +2129,7 @@ async function loadParticipants() {
   try {
     const snapshot = await getDocs(collection(db, "participants"));
     const rows = snapshot.docs.map((item) => item.data()).sort((a, b) => String(b.createdAt || "").localeCompare(String(a.createdAt || "")));
-    list.innerHTML = `<div class="participant-table"><table><thead><tr><th>名前</th><th>メールアドレス</th><th>学年</th><th>興味分野</th></tr></thead><tbody>${rows.map((participant) => `<tr><td>${escapeHtml(participant.name || "")}</td><td>${escapeHtml(participant.email || "")}</td><td>${escapeHtml(participant.grade || "")}</td><td>${(participant.interests || []).map(escapeHtml).join(" / ")}</td></tr>`).join("") || "<tr><td colspan=\"4\">参加者はまだいません。</td></tr>"}</tbody></table></div>`;
+    list.innerHTML = `<div class="participant-table"><table><thead><tr><th>ニックネーム</th><th>メールアドレス</th><th>学年</th><th>興味分野</th><th>討伐完了</th></tr></thead><tbody>${rows.map((participant) => `<tr><td>${escapeHtml(participant.name || "")}</td><td>${escapeHtml(participant.email || "")}</td><td>${escapeHtml(participant.grade || "")}</td><td>${(participant.interests || []).map(escapeHtml).join(" / ")}</td><td>${participant.kaijuBattleCompletedAt ? "完了" : "―"}</td></tr>`).join("") || "<tr><td colspan=\"5\">参加者はまだいません。</td></tr>"}</tbody></table></div>`;
   } catch (error) {
     list.textContent = "参加者一覧を読み込めませんでした。管理者権限とFirestoreルールを確認してください。";
   }
