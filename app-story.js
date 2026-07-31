@@ -527,6 +527,28 @@ const puzzleExplanations = {
   "toko-flick-boss": "12マスはスマホのかなフリック入力の並びです。番号順に、矢印の方向へフリックした文字と丸印の文字を読むと『えふきゃん』になります。"
 };
 
+const pdfHints = {
+  "shodai-trade": ["翔大鋼業のホームページを調査せよ！"],
+  "steel-grid": ["暗号の骨組みの中の12345ヒントから当てはまる単語を入れて①②③④⑤⑥⑦を見つけろ！"],
+  "morikawa-identity": ["右のヘルメットで身を守り、左のエンブレムのもと活動していた函館のヒーローだ。"],
+  "morikawa-seal": ["一つ目のヒントで得た企業の公式サイトを見ながら下の言葉を完成させよ。"],
+  "morikawa-rescue": ["ある：FW（フォワード）、MF（ミッドフィルダー）、FK（フリーキック）、HT（ハーフタイム）／なし：GK（ゴールキーパー）、DF（ディフェンダー）、PK（ペナルティキック）、VAR"],
+  "dock-core": ["船舶の建造、艦艇や商船の各種検査・修理、鉄構機械の製作などの分野において、お客様に選ばれ続けるための一番の強みとは？"],
+  "dock-weapon": ["王冠、ヘッドフォン、はちまき。以下の3つの言葉の法則性を見つけ出し、どれが武器なのか選ぶんだ！"],
+  "dock-password": ["B2＋の＋C6゛＋C7＋A5＝？"],
+  "dock-miniboss": ["2＝28、7－6＝1、9－2＝3、12－5＝■。"],
+  "century-cruising": ["日常を離れ、ひとときのプライベート・〇〇〇〇〇〇が叶う場所。"],
+  "century-scenery": ["このヒーローは本拠地の客室や露天風呂から見える景色がとてもいいんだ！ 函館の特徴でもある夜景や海を最大限に生かしたおもてなしをしているんだ！"],
+  "toko-message": ["123診断し、456還元する。"],
+  "toko-diagnosis": ["建物を長持ちさせるために、彼らがまず行う工程は？"],
+  "toko-compass": ["これが最後のロックだ。以下の謎を解き明かし、彼らが背負うべき本当の名前を覚醒させるんだ！"],
+  "toko-flick-boss": ["12マスのグリッドを解析せよ！"]
+};
+
+function getPdfHints(puzzle) {
+  return pdfHints[puzzle?.puzzleType] || [];
+}
+
 const finalPuzzles = [
   {
     title: "第1問 迷路の指示",
@@ -892,6 +914,7 @@ function renderMission(id) {
   const detail = document.querySelector("#mission-detail");
   const unlocked = state.unlocked.has(mission.id);
   const { steps, step, stepIndex } = getActiveMissionStep(mission);
+  const hints = getPdfHints(step);
   const hintCount = getHintCount(mission.id, stepIndex);
   detail.innerHTML = `
     <aside class="mission-brief" style="--accent:${mission.accent}">
@@ -917,11 +940,11 @@ function renderMission(id) {
         <input id="answer-input" name="answer" autocomplete="off" placeholder="答えを入力" />
         <div class="quiz-actions">
           <button class="button primary" type="submit" aria-label="回答する">回答する</button>
-          <button class="button ghost" type="button" data-action="hint" data-id="${mission.id}" aria-label="ヒントを見る">ヒントを見る</button>
+          ${hints.length ? `<button class="button ghost" type="button" data-action="hint" data-id="${mission.id}" aria-label="ヒントを見る">ヒントを見る</button>` : ""}
           ${missionWebsiteLinkHtml(mission)}
         </div>
       </form>
-      <div class="hint-panel" id="hint-panel">${hintPanelHtml(step, hintCount)}</div>
+      ${hints.length ? `<div class="hint-panel" id="hint-panel">${hintPanelHtml(step, hintCount)}</div>` : ""}
       <p class="answer-result ${unlocked ? "ok" : ""}" id="answer-result">${unlocked ? "通信接続済み。企業紹介が開いています。" : ""}</p>
     </article>
     <article class="company-profile ${unlocked ? "is-visible" : ""}" id="company-profile">
@@ -934,8 +957,8 @@ function renderMission(id) {
 }
 
 function hintPanelHtml(step, count) {
-  const hints = step.hints || [];
-  if (!count) return `<p class="hint-empty">ヒントはボタンを押すたびに1つずつ復元されます。ペナルティはありません。</p>`;
+  const hints = getPdfHints(step);
+  if (!count) return `<p class="hint-empty">PDFの手がかりは、ボタンを押すと表示されます。</p>`;
   return `
     <div class="hint-meter">HINT ${count}/${hints.length}</div>
     ${hints
@@ -1080,6 +1103,7 @@ function finalPuzzleHtml(completed, index) {
   if (!completed) return `<aside class="final-brief locked-final-brief"><p class="eyebrow dark">FINAL CODE LOCKED</p><h2>最終暗号はヒーロー全員の解放後に出現します</h2><p>企業ミッションをすべて解くと、怪獣の弱点を探す5問の暗号が開きます。</p></aside>`;
   if (index >= finalPuzzles.length) return `<aside class="final-brief is-clear"><p class="eyebrow dark">FINAL CODE COMPLETE</p><h2>弱点「背中」を特定</h2><p>全ての作戦暗号を突破。ヒーローの合体攻撃でナゾゴラを撃退しよう。</p></aside>`;
   const puzzle = finalPuzzles[index];
+  const hints = getPdfHints(puzzle);
   const hintCount = getFinalHintCount(index);
   return `
     <section class="final-puzzle" style="--accent:${index === 2 ? "#e45336" : "#ffd34d"}">
@@ -1093,9 +1117,9 @@ function finalPuzzleHtml(completed, index) {
       <form id="final-answer-form" data-step="${index}">
         <label for="final-answer-input">作戦コード</label>
         <input id="final-answer-input" name="answer" autocomplete="off" placeholder="答えを入力" />
-        <div class="quiz-actions"><button class="button primary" type="submit">作戦コードを送信</button><button class="button ghost" type="button" data-action="final-hint" data-step="${index}">ヒントを見る</button></div>
+        <div class="quiz-actions"><button class="button primary" type="submit">作戦コードを送信</button>${hints.length ? `<button class="button ghost" type="button" data-action="final-hint" data-step="${index}">ヒントを見る</button>` : ""}</div>
       </form>
-      <div class="hint-panel" id="final-hint-panel">${finalHintPanelHtml(puzzle, hintCount)}</div>
+      ${hints.length ? `<div class="hint-panel" id="final-hint-panel">${finalHintPanelHtml(puzzle, hintCount)}</div>` : ""}
       <p class="answer-result" id="final-answer-result"></p>
     </section>
   `;
@@ -1269,8 +1293,9 @@ function getFinalHintCount(index) {
 }
 
 function finalHintPanelHtml(puzzle, count) {
-  if (!count) return `<p class="hint-empty">ヒントはボタンを押すたびに1つずつ表示されます。</p>`;
-  return `<div class="hint-meter">HINT ${count}/${puzzle.hints.length}</div>${puzzle.hints.slice(0, count).map((hint, hintIndex) => `<p class="hint is-visible"><strong>${hintIndex + 1}.</strong> ${escapeHtml(hint)}</p>`).join("")}`;
+  const hints = getPdfHints(puzzle);
+  if (!count) return `<p class="hint-empty">PDFの手がかりは、ボタンを押すと表示されます。</p>`;
+  return `<div class="hint-meter">HINT ${count}/${hints.length}</div>${hints.slice(0, count).map((hint, hintIndex) => `<p class="hint is-visible"><strong>${hintIndex + 1}.</strong> ${escapeHtml(hint)}</p>`).join("")}`;
 }
 
 function renderFinalBattle(battleReady) {
@@ -1542,8 +1567,10 @@ function revealHint(id) {
   const mission = findMission(id);
   if (!mission) return;
   const { step, stepIndex } = getActiveMissionStep(mission);
+  const hints = getPdfHints(step);
+  if (!hints.length) return;
   const hintKey = getHintKey(id, stepIndex);
-  state.hints[hintKey] = Math.min((step.hints || []).length, getHintCount(id, stepIndex) + 1);
+  state.hints[hintKey] = Math.min(hints.length, getHintCount(id, stepIndex) + 1);
   saveState();
   document.querySelector("#hint-panel").innerHTML = hintPanelHtml(step, state.hints[hintKey]);
 }
@@ -1724,8 +1751,10 @@ async function saveParticipant(formData) {
 function revealFinalHint(index) {
   const puzzle = finalPuzzles[index];
   if (!puzzle) return;
+  const hints = getPdfHints(puzzle);
+  if (!hints.length) return;
   const key = `final:${index}`;
-  state.hints[key] = Math.min(puzzle.hints.length, getFinalHintCount(index) + 1);
+  state.hints[key] = Math.min(hints.length, getFinalHintCount(index) + 1);
   saveState();
   document.querySelector("#final-hint-panel").innerHTML = finalHintPanelHtml(puzzle, state.hints[key]);
 }
