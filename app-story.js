@@ -507,6 +507,26 @@ const missions = [
 
 missions.sort((a, b) => ["shodai", "morikawa", "dock", "toko", "century"].indexOf(a.id) - ["shodai", "morikawa", "dock", "toko", "century"].indexOf(b.id));
 
+const puzzleExplanations = {
+  "shodai-trade": "翔大鋼業が得意とするのは、建物の内部に強い骨組みをつくる『鉄筋工事』です。企業サイトの事業内容と、問題文の『骨組み』が同じ仕事を指しています。",
+  "steel-grid": "キュウリ、ギンコウ、コック、コウツウ、ジョーカーを表に入れ、中央の『テッキンコウジ』と合わせて番号の文字を読みます。①から⑦を順に読むと『ギジュツリョク』になります。",
+  "shodai-miniboss": "曜日を漢字で見ると、日・月・火・水・木は4画、土は3画です。同じルールで金は8画なので、答えは『金の8角形』です。",
+  "morikawa-identity": "白い現場ヘルメットと青緑のエンブレムは、函館で建設に携わる森川組の手がかりです。漢字3文字の企業名『森川組』を導きます。",
+  "morikawa-seal": "赤い四角は『RECRUIT MOVIE』のM、黄色い三角は出発・発進・発見・発表に共通する『発』を示します。図形の文字をつなげると、森川組の言葉『Mの創発』になります。",
+  "morikawa-rescue": "『ある』側のサッカー用語には、フォ・フィ・フリ・フのようにフの音があります。エフ・キャンにも『フ』が入るため、答えは『ある』です。",
+  "dock-core": "函館どっくは、船の建造や修理、鉄構機械の製作を支える会社です。選ばれ続けるために磨いている強みとして、企業情報から『技術力』を読み取れます。",
+  "dock-weapon": "王冠、ヘッドフォン、はちまきは、どれも頭につけるものです。選択肢の中で同じく頭を守る装備は『ヘルメット』です。",
+  "dock-password": "暗号メモの指定どおり、技術力・貨物船・はこだてどっくの文字を順に抜き出します。並べると、函館どっくのものづくりへの思いを表す『ものづくり』になります。",
+  "dock-miniboss": "月の日数に注目します。12月も5月も31日なので、日数の差は0です。",
+  "century-cruising": "ホテル紹介にある『プライベート・クルージングが叶う場所』という表現が手がかりです。海や船をテーマにした非日常の体験を表す答えは『クルージング』です。",
+  "century-scenery": "色ごとの文字列から、指定された数字の位置の文字を抜き出します。赤・青・黒の記録を順に読むと『け・し・き』となり、答えは『景色』です。",
+  "century-meal": "50音順で文字を動かします。さの1つ先はし、ろの5つ前はよ、おの3つ先はく、ぞの3つ前はじです。つなげると『しょくじ』になります。",
+  "toko-message": "番号付きの文字を1から6まで順に読みます。すると東興アイテックが大切にする使命『建物を診断し、社会に還元する。』が完成します。",
+  "toko-diagnosis": "建物を長持ちさせるには、工事の前に状態を把握する必要があります。まず劣化状態を調査・診断し、建物に合った工法を選ぶため、正解は2です。",
+  "toko-compass": "方位の音読みと色の記録を使います。東を表す『とう』と、赤い四角が示す『こう』を組み合わせると『東興』になります。",
+  "toko-flick-boss": "12マスはスマホのかなフリック入力の並びです。番号順に、矢印の方向へフリックした文字と丸印の文字を読むと『えふきゃん』になります。"
+};
+
 const finalPuzzles = [
   {
     title: "第1問 迷路の指示",
@@ -658,6 +678,8 @@ const battleState = {
   stepIndex: -1,
   hp: 100
 };
+
+let pendingClearAction = null;
 
 const app = document.querySelector("#app");
 
@@ -1428,6 +1450,7 @@ function handleDocumentClick(event) {
   if (action === "reset") return resetProgress();
   if (action === "close-unlock") return closeHeroUnlock();
   if (action === "replay-unlock-video") return replayUnlockVideo(target);
+  if (action === "continue-after-clear") return continueAfterClear();
   if (action === "start-story") return showStoryAccessDialog();
   if (action === "close-story-access") return closeStoryAccessDialog();
   if (action === "start-battle" || action === "replay-battle") return startFinalBattle();
@@ -1539,31 +1562,60 @@ function checkAnswer(id, rawAnswer) {
     return;
   }
 
-  if (stepIndex < steps.length - 1) {
-    result.textContent = step.clearMessage || "正解。次の問題のロックを解除します。";
-    quizBox.classList.add("unlocking");
-    window.setTimeout(() => {
-      state.steps[mission.id] = stepIndex + 1;
+  quizBox.classList.add("unlocking");
+  showClearResult({
+    title: step.title,
+    message: step.clearMessage || "正解。次の問題のロックを解除します。",
+    explanation: puzzleExplanations[step.puzzleType] || "答えにたどり着く手がかりを、問題文と企業情報から順番に確認しよう。",
+    continueLabel: stepIndex < steps.length - 1 ? "次の問題へ" : "ヒーローを呼び覚ます",
+    onContinue: () => {
+      if (stepIndex < steps.length - 1) {
+        state.steps[mission.id] = stepIndex + 1;
+        saveState();
+        renderMission(mission.id);
+        return;
+      }
+
+      const wasUnlocked = state.unlocked.has(mission.id);
+      state.unlocked.add(mission.id);
+      state.steps[mission.id] = steps.length;
+      state.recentUnlock = mission.id;
       saveState();
       renderMission(mission.id);
-    }, 650);
-    return;
-  }
+      if (!wasUnlocked) showHeroUnlock(mission);
+    }
+  });
+}
 
-  result.textContent = "通信解析中... 記憶エネルギー復元。";
-  quizBox.classList.add("unlocking");
-  window.setTimeout(() => {
-    const wasUnlocked = state.unlocked.has(mission.id);
-    state.unlocked.add(mission.id);
-    state.steps[mission.id] = steps.length;
-    state.recentUnlock = mission.id;
-    saveState();
-    document.querySelector("#company-profile").classList.add("is-visible");
-    document.querySelector("#mission-roster").innerHTML = heroCollectionHtml("mini");
-    renderFixedProgress();
-    result.textContent = "HERO CALL SUCCESS。ヒーローの記憶エネルギーが復元されました。";
-    if (!wasUnlocked) showHeroUnlock(mission);
-  }, 650);
+function showClearResult({ title, message, explanation, continueLabel, onContinue }) {
+  document.querySelector(".clear-result-modal")?.remove();
+  pendingClearAction = onContinue;
+  const modal = el("div", "clear-result-modal");
+  modal.setAttribute("role", "dialog");
+  modal.setAttribute("aria-modal", "true");
+  modal.setAttribute("aria-labelledby", "clear-result-title");
+  modal.innerHTML = `
+    <article class="clear-result-card">
+      <p class="clear-result-stamp" aria-hidden="true">CLEAR!</p>
+      <p class="eyebrow dark">MISSION COMPLETE</p>
+      <h2 id="clear-result-title">${escapeHtml(title)}</h2>
+      <p class="clear-result-message">${escapeHtml(message)}</p>
+      <section class="clear-explanation" aria-label="問題の解説">
+        <h3>解説</h3>
+        <p>${escapeHtml(explanation)}</p>
+      </section>
+      <button class="button primary" type="button" data-action="continue-after-clear">${escapeHtml(continueLabel)}</button>
+    </article>
+  `;
+  document.body.append(modal);
+  modal.querySelector("button")?.focus();
+}
+
+function continueAfterClear() {
+  const onContinue = pendingClearAction;
+  pendingClearAction = null;
+  document.querySelector(".clear-result-modal")?.remove();
+  onContinue?.();
 }
 
 function showHeroUnlock(mission) {
