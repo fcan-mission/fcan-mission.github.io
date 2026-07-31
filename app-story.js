@@ -597,6 +597,49 @@ const finalPuzzles = [
   }
 ];
 
+const kaijuBattlePuzzles = [
+  {
+    title: "第1問 キーボード暗号",
+    body: "？に入る英単語は？　nazotoki → msxpyplo　／　？ → dpvvrt",
+    acceptedAnswers: ["soccer", "サッカー", "さっかー"],
+    hint: "キーボードのアルファベットがすべて右にずれていることに注目しよう。",
+    damage: 20,
+    puzzleType: "kaiju-keyboard"
+  },
+  {
+    title: "第2問 ビブスのキーワード",
+    body: "？に文字を入れてキーワードを入力しよう。　あ ①　？ ②　ざ ③　？ ④",
+    acceptedAnswers: ["あしざる", "アシザル"],
+    hint: "試合中の4コートの審判が着ているビブスの、背番号の上を確認しよう。",
+    damage: 20,
+    puzzleType: "kaiju-bib"
+  },
+  {
+    title: "第3問 母音カウント",
+    body: "日本＝0　カナダ＝3　アメリカ＝2　メキシコ＝0。このときジャパン＝？",
+    acceptedAnswers: ["2", "２", "二"],
+    hint: "国名を発音してみよう。母音がAのカタカナの個数を表している。",
+    damage: 20,
+    puzzleType: "kaiju-vowel"
+  },
+  {
+    title: "第4問 お札の文字",
+    body: "■に入る言葉はなに？　■×5＝つ　■×10＝し　つ×2＝し",
+    acceptedAnswers: ["き", "キ"],
+    hint: "数字の後に『枚』をつけると分かりやすいかも。",
+    damage: 20,
+    puzzleType: "kaiju-banknote"
+  },
+  {
+    title: "第5問 フィールドパズル",
+    body: "FW・GK・PK・シュートの図形を読み解き、最後の攻撃コードを入力しよう。",
+    acceptedAnswers: ["シュート", "しゅーと", "shoot"],
+    hint: "PDFの図形の色と、サッカー用語の位置関係を確認しよう。",
+    damage: 20,
+    puzzleType: "kaiju-field"
+  }
+];
+
 const characterAssets = {
   "real-steel": {
     src: "assets/characters/steel-frame-v2.png",
@@ -698,7 +741,9 @@ const battleState = {
   timer: null,
   status: "ready",
   stepIndex: -1,
-  hp: 100
+  hp: 100,
+  lastHitPuzzle: null,
+  lastHitIndex: -1
 };
 
 let pendingClearAction = null;
@@ -1090,7 +1135,7 @@ function renderClear() {
     : `現在 ${state.unlocked.size} / ${missions.length}人。全ヒーロー収集後に解放されます。`;
   document.querySelector("#hero-collection").innerHTML = heroCollectionPanelHtml("full");
   document.querySelector("#final-puzzle-area").innerHTML = finalPuzzleHtml(completed, finalStepIndex);
-  renderFinalBattle(finalReady);
+  renderKaijuBattle(finalReady);
   const form = document.querySelector("#match-form");
   if (form) form.outerHTML = endingActionsHtml(finalReady);
 }
@@ -1464,6 +1509,116 @@ function clearBattleTimer() {
   battleState.timer = null;
 }
 
+function getKaijuBattleIndex() {
+  return Math.min(Math.max(Number(state.steps.kaijuBattle || 0), 0), kaijuBattlePuzzles.length);
+}
+
+function renderKaijuBattle(battleReady) {
+  const stage = document.querySelector("#battle-stage");
+  const battleIndex = getKaijuBattleIndex();
+  const complete = battleIndex >= kaijuBattlePuzzles.length;
+  const status = !battleReady ? "locked" : battleState.status === "hit" ? "hit" : complete ? "victory" : battleState.status === "playing" ? "playing" : "ready";
+  const puzzle = status === "hit" ? battleState.lastHitPuzzle : battleReady && !complete ? kaijuBattlePuzzles[battleIndex] : null;
+  const activeHero = puzzle ? missions[(status === "hit" ? battleState.lastHitIndex : battleIndex) % missions.length] : null;
+  const hp = battleReady ? Math.max(0, 100 - battleIndex * 20) : 100;
+  const message = !battleReady
+    ? "5人のヒーローを集め、怪獣の弱点を特定すると怪獣討伐編が解放されます。"
+    : status === "hit"
+      ? "攻撃が命中！ 次の攻撃コードを準備しています。"
+      : complete
+        ? "5問の謎を解き、ナゾゴラのHPをすべて削り切った！"
+        : status === "ready"
+          ? "怪獣の弱点は背中だ。5問の謎を解いて、みんなで攻撃しよう！"
+          : `第${battleIndex + 1}問の答えを入力して攻撃しよう。`;
+  stage.innerHTML = `
+    <section class="final-battle cinematic-battle ${status === "victory" ? "is-victory" : ""} ${status === "locked" ? "is-locked" : ""} ${status === "hit" ? "is-hit" : ""}">
+      <div class="final-battle-copy">
+        <p class="eyebrow dark">FINAL BATTLE</p>
+        <h2>${battleReady ? status === "victory" ? "ナゾゴラ討伐完了" : "怪獣討伐編" : "全ヒーロー収集後に解放されます"}</h2>
+        <p>${message}</p>
+      </div>
+      <div class="battle-hp" aria-label="ナゾゴラHP ${hp}">
+        <span>ナゾゴラ HP</span><strong>${hp}</strong><div><i style="width:${hp}%"></i></div>
+      </div>
+      <div class="battle-arena ${activeHero?.attackClass || ""}" data-status="${status}">
+        <div class="battle-bg" aria-hidden="true"></div><div class="battle-speed-lines" aria-hidden="true"></div><div class="battle-shockwave" aria-hidden="true"></div><div class="battle-effect" aria-hidden="true"></div><div class="impact-flash" aria-hidden="true"></div>
+        ${characterSvg("real-kaiju", "final-kaiju", "ナゾゴラ")}
+        ${status === "hit" && activeHero ? `<div class="active-hero-cutin" style="--accent:${activeHero.accent}" aria-label="${escapeAttribute(activeHero.heroName)}の攻撃"><span>DAMAGE!</span>${characterSvg(activeHero.character, "active-hero-character", activeHero.heroName)}<strong>${escapeHtml(activeHero.attackName)}</strong></div>` : ""}
+        ${status === "victory" ? `<div class="victory-burst" aria-hidden="true"><span>ナゾゴラ討伐完了</span></div>` : ""}
+        <p class="battle-action-text">${status === "hit" ? `正解！ ナゾゴラに${puzzle?.damage || 20}ダメージ。` : battleReady && !complete ? `ATTACK CODE ${battleIndex + 1} / ${kaijuBattlePuzzles.length}` : ""}</p>
+      </div>
+      ${puzzle ? kaijuBattlePuzzleHtml(puzzle, battleIndex, status) : ""}
+      ${status === "victory" ? endingStoryHtml() : ""}
+      <div class="battle-controls">
+        ${battleReady && status === "ready" ? `<button class="button primary" type="button" data-action="start-kaiju-battle">怪獣討伐を開始する</button>` : ""}
+        ${battleReady && status === "victory" ? `<button class="button primary" type="button" data-action="replay-kaiju-battle">もう一度挑戦する</button>` : ""}
+        <a class="button ghost" href="#missions">企業一覧へ</a>
+      </div>
+    </section>`;
+}
+
+function kaijuBattlePuzzleHtml(puzzle, index, status) {
+  if (status === "hit") return `<section class="battle-question battle-question-hit"><strong>HIT! −${puzzle.damage} HP</strong><p>ナゾゴラに攻撃が命中した！</p></section>`;
+  const visual = puzzle.puzzleType === "kaiju-keyboard"
+    ? `<div class="kaiju-puzzle-visual cipher"><span>nazotoki</span><b>→</b><span>msxpyplo</span><span>？</span><b>→</b><span>dpvvrt</span></div>`
+    : puzzle.puzzleType === "kaiju-bib"
+      ? `<div class="kaiju-puzzle-visual bibs"><span>あ<small>1</small></span><span>？<small>2</small></span><span>ざ<small>3</small></span><span>？<small>4</small></span></div>`
+      : puzzle.puzzleType === "kaiju-vowel"
+        ? `<div class="kaiju-puzzle-visual equation">日本＝0　カナダ＝3　アメリカ＝2　メキシコ＝0<br /><strong>ジャパン＝？</strong></div>`
+        : puzzle.puzzleType === "kaiju-banknote"
+          ? `<div class="kaiju-puzzle-visual equation">■×5＝つ　■×10＝し　つ×2＝し</div>`
+          : `<img class="kaiju-field-image" src="assets/puzzles/kaiju-final-grid-pdf.png" width="1191" height="1684" alt="FW、GK、PK、シュートの図形パズル" />`;
+  return `
+    <section class="battle-question">
+      <p class="eyebrow dark">ATTACK CODE ${index + 1} / ${kaijuBattlePuzzles.length}</p>
+      <h3>${escapeHtml(puzzle.title)}</h3>
+      ${visual}
+      <p><strong>問題:</strong> ${escapeHtml(puzzle.body)}</p>
+      <form id="battle-answer-form" data-step="${index}">
+        <label for="battle-answer-input">攻撃コード</label>
+        <input id="battle-answer-input" name="answer" autocomplete="off" placeholder="答えを入力" />
+        <button class="button primary" type="submit">攻撃する</button>
+        <p class="answer-result" id="battle-answer-result"></p>
+      </form>
+      <details class="battle-hint"><summary>ヒントを見る</summary><p>${escapeHtml(puzzle.hint)}</p></details>
+    </section>`;
+}
+
+function startKaijuBattle() {
+  battleState.status = "playing";
+  renderKaijuBattle(true);
+}
+
+function checkKaijuBattleAnswer(index, rawAnswer) {
+  const puzzle = kaijuBattlePuzzles[index];
+  if (!puzzle || index !== getKaijuBattleIndex()) return;
+  const result = document.querySelector("#battle-answer-result");
+  const ok = puzzle.acceptedAnswers.some((answer) => normalize(answer) === normalize(rawAnswer));
+  result.classList.toggle("ok", ok);
+  result.classList.toggle("ng", !ok);
+  if (!ok) {
+    result.textContent = "攻撃コードが違う。問題とヒントをもう一度確認しよう。";
+    return;
+  }
+  state.steps.kaijuBattle = index + 1;
+  saveState();
+  battleState.lastHitPuzzle = puzzle;
+  battleState.lastHitIndex = index;
+  battleState.status = "hit";
+  renderKaijuBattle(true);
+  clearBattleTimer();
+  battleState.timer = window.setTimeout(() => {
+    if (getKaijuBattleIndex() >= kaijuBattlePuzzles.length) {
+      battleState.status = "victory";
+    } else {
+      battleState.status = "playing";
+    }
+    battleState.lastHitPuzzle = null;
+    battleState.lastHitIndex = -1;
+    renderKaijuBattle(true);
+  }, window.matchMedia("(prefers-reduced-motion: reduce)").matches ? 300 : 1100);
+}
+
 function handleDocumentClick(event) {
   const target = event.target.closest("[data-action]");
   if (!target) return;
@@ -1480,6 +1635,12 @@ function handleDocumentClick(event) {
   if (action === "close-story-access") return closeStoryAccessDialog();
   if (action === "start-battle" || action === "replay-battle") return startFinalBattle();
   if (action === "skip-battle") return finishBattle();
+  if (action === "start-kaiju-battle") return startKaijuBattle();
+  if (action === "replay-kaiju-battle") {
+    state.steps.kaijuBattle = 0;
+    saveState();
+    return startKaijuBattle();
+  }
   if (action === "edit-profile") {
     document.querySelector("#profile-view").innerHTML = registrationFormHtml(state.participant);
   }
@@ -1513,6 +1674,10 @@ function handleSubmit(event) {
   if (event.target.id === "final-answer-form") {
     event.preventDefault();
     checkFinalAnswer(Number(event.target.dataset.step), new FormData(event.target).get("answer"));
+  }
+  if (event.target.id === "battle-answer-form") {
+    event.preventDefault();
+    checkKaijuBattleAnswer(Number(event.target.dataset.step), new FormData(event.target).get("answer"));
   }
   if (event.target.id === "story-access-form") {
     event.preventDefault();
