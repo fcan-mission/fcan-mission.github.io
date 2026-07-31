@@ -690,6 +690,8 @@ const STORAGE_KEYS = {
 
 // 一時的な画面確認用。企業ミッション未クリアでも最終暗号だけを試せるようにする。
 const FINAL_BATTLE_TEST_MODE = true;
+// 当日は怪獣討伐編を単独でも体験できるよう、前提ミッションをスキップする。
+const DIRECT_KAIJU_BATTLE_MODE = true;
 
 const state = {
   participant: readJson(STORAGE_KEYS.participant, null),
@@ -1120,21 +1122,25 @@ function renderClear() {
   const isTestMode = FINAL_BATTLE_TEST_MODE && !allHeroesUnlocked;
   const completed = allHeroesUnlocked || FINAL_BATTLE_TEST_MODE;
   const finalStepIndex = getFinalPuzzleIndex();
-  const finalReady = allHeroesUnlocked && finalStepIndex >= finalPuzzles.length;
+  const finalReady = DIRECT_KAIJU_BATTLE_MODE || (allHeroesUnlocked && finalStepIndex >= finalPuzzles.length);
   if (state.finalUnlocked !== finalReady) {
     state.finalUnlocked = finalReady;
     saveState();
   }
-  document.querySelector("#clear-title").textContent = finalReady ? "ナゾゴラ撃退準備完了" : isTestMode ? "最終作戦の暗号を解け（テスト）" : completed ? "最終作戦の暗号を解け" : "ヒーローを全員集めよう";
-  document.querySelector("#clear-copy").textContent = isTestMode
-    ? `テストモード：企業ミッション未クリアでも最終暗号を解けます（${finalStepIndex} / ${finalPuzzles.length}）。`
+  document.querySelector("#clear-title").textContent = DIRECT_KAIJU_BATTLE_MODE ? "怪獣討伐編に挑戦しよう" : finalReady ? "ナゾゴラ撃退準備完了" : isTestMode ? "最終作戦の暗号を解け（テスト）" : completed ? "最終作戦の暗号を解け" : "ヒーローを全員集めよう";
+  document.querySelector("#clear-copy").textContent = DIRECT_KAIJU_BATTLE_MODE
+    ? "企業ミッションの進行状況に関係なく、怪獣討伐編の5問へすぐ挑戦できます。"
+    : isTestMode
+      ? `テストモード：企業ミッション未クリアでも最終暗号を解けます（${finalStepIndex} / ${finalPuzzles.length}）。`
     : completed
     ? finalReady
       ? "5人の企業ヒーローが集結。函館のフィールドで最後の作戦を開始できます。"
       : `5人が集結。怪獣の弱点を特定する最終暗号を解こう（${finalStepIndex} / ${finalPuzzles.length}）。`
     : `現在 ${state.unlocked.size} / ${missions.length}人。全ヒーロー収集後に解放されます。`;
   document.querySelector("#hero-collection").innerHTML = heroCollectionPanelHtml("full");
-  document.querySelector("#final-puzzle-area").innerHTML = finalPuzzleHtml(completed, finalStepIndex);
+  document.querySelector("#final-puzzle-area").innerHTML = DIRECT_KAIJU_BATTLE_MODE
+    ? `<aside class="final-brief is-clear"><p class="eyebrow dark">DIRECT ACCESS</p><h2>最終決戦へ直行</h2><p>下の「怪獣討伐を開始する」から、5問の討伐編を始めよう。</p></aside>`
+    : finalPuzzleHtml(completed, finalStepIndex);
   renderKaijuBattle(finalReady);
   const form = document.querySelector("#match-form");
   if (form) form.outerHTML = endingActionsHtml(finalReady);
