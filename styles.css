@@ -4657,6 +4657,47 @@ img.mission-character {
   animation: effectBeam 800ms ease-in-out infinite;
 }
 
+.story-access-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: grid;
+  place-items: center;
+  padding: 22px;
+  background: rgba(8, 31, 24, 0.64);
+  animation: modalFadeIn 180ms ease-out both;
+}
+
+.story-access-card {
+  width: min(460px, 100%);
+  padding: clamp(24px, 5vw, 38px);
+  color: var(--ink);
+  background: #fffefa;
+  border: 3px solid var(--ink);
+  box-shadow: 8px 8px 0 var(--grass);
+}
+
+.story-access-card h2 {
+  margin: 6px 0 10px;
+}
+
+.story-access-card form {
+  display: grid;
+  gap: 10px;
+  margin-top: 22px;
+}
+
+.story-access-card input {
+  width: 100%;
+}
+
+.story-access-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 8px;
+}
+
 .attack-heal .battle-effect::before {
   content: "";
   position: absolute;

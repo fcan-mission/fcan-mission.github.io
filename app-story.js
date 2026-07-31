@@ -1437,6 +1437,8 @@ function handleDocumentClick(event) {
   if (action === "reset") return resetProgress();
   if (action === "close-unlock") return closeHeroUnlock();
   if (action === "replay-unlock-video") return replayUnlockVideo(target);
+  if (action === "start-story") return showStoryAccessDialog();
+  if (action === "close-story-access") return closeStoryAccessDialog();
   if (action === "start-battle" || action === "replay-battle") return startFinalBattle();
   if (action === "skip-battle") return finishBattle();
   if (action === "edit-profile") {
@@ -1473,6 +1475,53 @@ function handleSubmit(event) {
     event.preventDefault();
     checkFinalAnswer(Number(event.target.dataset.step), new FormData(event.target).get("answer"));
   }
+  if (event.target.id === "story-access-form") {
+    event.preventDefault();
+    verifyStoryAccess(event.target);
+  }
+}
+
+function showStoryAccessDialog() {
+  document.querySelector(".story-access-modal")?.remove();
+  const modal = el("div", "story-access-modal");
+  modal.setAttribute("role", "dialog");
+  modal.setAttribute("aria-modal", "true");
+  modal.setAttribute("aria-labelledby", "story-access-title");
+  modal.innerHTML = `
+    <article class="story-access-card">
+      <p class="eyebrow dark">MISSION ACCESS</p>
+      <h2 id="story-access-title">合言葉を入力</h2>
+      <p>謎解きを始めるには、運営から案内された合言葉を入力してください。</p>
+      <form id="story-access-form">
+        <label for="story-access-password">合言葉</label>
+        <input id="story-access-password" name="password" type="password" autocomplete="off" required />
+        <p class="form-error" id="story-access-error" role="alert" hidden></p>
+        <div class="story-access-actions">
+          <button class="button primary" type="submit">謎解きを始める</button>
+          <button class="button ghost" type="button" data-action="close-story-access">キャンセル</button>
+        </div>
+      </form>
+    </article>
+  `;
+  document.body.append(modal);
+  modal.querySelector("input")?.focus();
+}
+
+function verifyStoryAccess(form) {
+  const password = new FormData(form).get("password")?.toString().trim();
+  if (password === "エフキャン") {
+    closeStoryAccessDialog();
+    location.hash = "#story";
+    return;
+  }
+  const error = form.querySelector("#story-access-error");
+  error.textContent = "合言葉が違います。もう一度入力してください。";
+  error.hidden = false;
+  form.querySelector("input")?.focus();
+}
+
+function closeStoryAccessDialog() {
+  document.querySelector(".story-access-modal")?.remove();
 }
 
 function revealHint(id) {
