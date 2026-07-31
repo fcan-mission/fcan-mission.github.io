@@ -21,7 +21,6 @@ const missions = [
     category: "建設・鉄筋",
     industry: "鉄筋工事",
     difficulty: 3,
-    booth: "B-1",
     accent: "#e95b3c",
     website: "http://www.syoudai.jp/",
     recruitUrl: "http://www.syoudai.jp/recruit.php",
@@ -120,7 +119,6 @@ const missions = [
     category: "建設・まちづくり",
     industry: "総合建設",
     difficulty: 3,
-    booth: "C-1",
     accent: "#22a65a",
     website: "http://morikawagumi.com/",
     recruitUrl: "http://morikawagumi.com/recruit/requirements/",
@@ -218,7 +216,6 @@ const missions = [
     category: "造船・機械",
     industry: "造船・修繕",
     difficulty: 3,
-    booth: "C-2",
     accent: "#2676a6",
     website: "https://www.hakodate-dock.co.jp/",
     recruitUrl: "https://www.hakodate-dock.co.jp/recruit/",
@@ -324,7 +321,6 @@ const missions = [
     category: "ホテル・観光",
     industry: "ホテル",
     difficulty: 2,
-    booth: "D-1",
     accent: "#c99d47",
     website: "https://www.centurymarina.com/",
     recruitUrl: "https://www.centurymarina.com/recruit/",
@@ -412,7 +408,6 @@ const missions = [
     category: "建物改修・防水",
     industry: "防水・外壁改修・塗装",
     difficulty: 3,
-    booth: "D-2",
     accent: "#ef7b2d",
     website: "https://tokoai.com/",
     recruitUrl: "https://tokoai.com/recruit.html",
@@ -884,9 +879,7 @@ function renderMission(id) {
       <div class="tag-row">
         <span class="tag">${escapeHtml(mission.category)}</span>
         <span class="tag">${stars(mission.difficulty)}</span>
-        <span class="tag">ブース ${escapeHtml(mission.booth)}</span>
       </div>
-      <a class="button secondary booth-link" href="#companies">ブースへ行く導線を見る</a>
     </aside>
     <article class="quiz-box mission-${escapeAttribute(mission.id)} ${unlocked ? "is-unlocked" : ""}" id="quiz-box" style="--accent:${mission.accent}">
       <p class="eyebrow dark">QUESTION ${stepIndex + 1} / ${steps.length}</p>
@@ -956,11 +949,10 @@ function renderCompanies() {
           <span class="hero-badge">${escapeHtml(mission.companyName.slice(0, 1))}</span>
           <div>
             <h2>${escapeHtml(mission.companyName)}</h2>
-            <p>${escapeHtml(mission.heroName)} / ${escapeHtml(mission.category)}</p>
+            <p>${unlocked ? escapeHtml(mission.heroName) : "???"} / ${escapeHtml(mission.category)}</p>
           </div>
         </div>
         <div class="tag-row">
-          <span class="tag">ブース ${escapeHtml(mission.booth)}</span>
           <span class="tag">${followed ? "フォロー中" : "未フォロー"}</span>
         </div>
         <p>${escapeHtml(mission.companyIntro.catch)}。${escapeHtml(mission.companyIntro.work)}</p>
@@ -978,8 +970,8 @@ function renderCompany(id) {
   renderTemplate("company-template");
   document.querySelector("#company-detail").innerHTML = `
     <aside class="mission-brief" style="--accent:${mission.accent}">
-      <p class="eyebrow">HERO PROFILE / BOOTH ${escapeHtml(mission.booth)}</p>
-      <h1>${escapeHtml(mission.heroName)}</h1>
+      <p class="eyebrow">HERO PROFILE</p>
+      <h1>${state.unlocked.has(mission.id) ? escapeHtml(mission.heroName) : "???"}</h1>
       <p>${escapeHtml(mission.companyName)}。${escapeHtml(mission.heroDescription)}</p>
       <div class="tag-row">
         <span class="tag">${escapeHtml(mission.category)}</span>
@@ -999,15 +991,15 @@ function companyProfileHtml(mission) {
       <span>${followed ? "フォロー中" : "未フォロー"}</span>
       <small>${followed ? "マイページに保存されています" : "エントリーではなく、この端末に保存されます"}</small>
     </div>
-    <h2>${escapeHtml(mission.heroName)}</h2>
+    <h2>${state.unlocked.has(mission.id) ? escapeHtml(mission.heroName) : "???"}</h2>
     <p><strong>${escapeHtml(mission.companyName)}</strong> / ${escapeHtml(mission.category)}</p>
     <dl class="company-profile-grid">
       <div><dt>このヒーローの力</dt><dd>${escapeHtml(mission.companyIntro.power)}</dd></div>
       <div><dt>実際の企業の仕事</dt><dd>${escapeHtml(mission.companyIntro.work)}</dd></div>
       <div><dt>街との関わり</dt><dd>${escapeHtml(mission.companyIntro.town)}</dd></div>
     </dl>
-    <div class="booth-questions">
-      <h3>ブースで聞いてみよう</h3>
+    <div class="company-questions">
+      <h3>企業について知ろう</h3>
       <ul>${mission.companyIntro.points.map((point) => `<li>${escapeHtml(point)}</li>`).join("")}</ul>
     </div>
     <p class="unlock-line">${escapeHtml(mission.unlockMessage)}</p>
@@ -1015,7 +1007,7 @@ function companyProfileHtml(mission) {
       <div>
         <p class="eyebrow dark">FOLLOW COMPANY</p>
         <h3>${escapeHtml(mission.companyName)}をフォローする</h3>
-        <p>あとで見返したり、会場で話を聞きに行く会社としてこの端末に保存します。</p>
+        <p>あとで見返したい会社として、この端末に保存します。</p>
       </div>
       <div class="interest-row follow-actions">
         <button class="button ${followed ? "interested" : "primary"}" type="button" data-action="interest" data-id="${mission.id}" aria-label="${escapeAttribute(mission.companyName)}をフォロー">
@@ -1352,11 +1344,10 @@ function endingActionsHtml(completed) {
     <section class="ending-actions">
       <div class="section-heading">
         <p class="eyebrow dark">NEXT ACTION</p>
-        <h2>${completed ? "次はブースへ" : "作戦を続けよう"}</h2>
+        <h2>${completed ? "企業のことをもっと知ろう" : "作戦を続けよう"}</h2>
       </div>
       <div class="interest-row">
         <a class="button primary" href="#companies">フォローした会社を確認する</a>
-        <a class="button ghost" href="#companies">ブースへ行く</a>
         <a class="button ghost" href="#home">もう一度遊ぶ</a>
         <button class="button ghost danger" type="button" data-action="reset">進行状況をリセット</button>
       </div>
@@ -1589,7 +1580,7 @@ function showHeroUnlock(mission) {
         <h2>${escapeHtml(mission.heroName)}が仲間になった</h2>
         <p>${escapeHtml(mission.heroDescription)}</p>
         <p class="unlock-line">${escapeHtml(mission.unlockMessage)}</p>
-        <p class="unlock-follow-copy">${escapeHtml(mission.companyName)}をフォローすると、あとで見返したりブースで話を聞く候補として保存できます。</p>
+        <p class="unlock-follow-copy">${escapeHtml(mission.companyName)}をフォローすると、あとで見返したい会社として保存できます。</p>
         <div class="unlock-next-actions">
           <button class="button primary" type="button" data-action="follow-company" data-id="${mission.id}" aria-label="${escapeAttribute(mission.companyName)}をフォロー">会社をフォローする</button>
           ${recruitmentLinkHtml(mission)}

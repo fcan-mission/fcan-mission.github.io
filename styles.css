@@ -6672,10 +6672,6 @@ img.mission-character {
   min-height: 4.8em;
 }
 
-.booth-link {
-  margin-top: 16px;
-}
-
 .quiz-box.unlocking {
   animation: cardShake 500ms ease-in-out;
 }
@@ -6702,18 +6698,18 @@ img.mission-character {
   border-style: solid;
 }
 
-.booth-questions {
+.company-questions {
   margin: 18px 0;
   padding: 16px;
   background: #e7f3e4;
   border: 2px dashed var(--ink);
 }
 
-.booth-questions h3 {
+.company-questions h3 {
   font-size: 20px;
 }
 
-.booth-questions ul {
+.company-questions ul {
   margin: 10px 0 0;
   padding-left: 1.2em;
   font-weight: 850;
