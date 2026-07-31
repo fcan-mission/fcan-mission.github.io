@@ -607,7 +607,7 @@ const kaijuBattlePuzzles = [
     title: "第1問 キーボード暗号",
     body: "？に入る英単語は？　nazotoki → msxpyplo　／　？ → dpvvrt",
     acceptedAnswers: ["soccer", "サッカー", "さっかー"],
-    hint: "キーボードを見よう。",
+    hint: "キーボードの画像を見せる。",
     explanation: "キーボードのアルファベットがすべて右にずれている暗号です。nazotoki を左へ1つずつ戻すと soccer になるため、答えは「soccer」です。",
     damage: 20,
     puzzleType: "kaiju-keyboard"
