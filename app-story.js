@@ -607,7 +607,7 @@ const kaijuBattlePuzzles = [
     title: "第1問 キーボード暗号",
     body: "？に入る英単語は？　nazotoki → msxpyplo　／　？ → dpvvrt",
     acceptedAnswers: ["soccer", "サッカー", "さっかー"],
-    hint: "キーボードのアルファベットがすべて右にずれていることに注目しよう。",
+    hint: "キーボードを見よう。",
     explanation: "キーボードのアルファベットがすべて右にずれている暗号です。nazotoki を左へ1つずつ戻すと soccer になるため、答えは「soccer」です。",
     damage: 20,
     puzzleType: "kaiju-keyboard"
@@ -616,7 +616,7 @@ const kaijuBattlePuzzles = [
     title: "第2問 ビブスのキーワード",
     body: "？に文字を入れてキーワードを入力しよう。　あ ①　？ ②　ざ ③　？ ④",
     acceptedAnswers: ["あしざる", "アシザル"],
-    hint: "試合中の4コートの審判が着ているビブスの、背番号の上を確認しよう。",
+    hint: "審判のビブスを見よう。",
     explanation: "4コートの審判が着るビブスの背番号の上にキーワードが隠されています。番号順に読むと「あしざる」になります。",
     damage: 20,
     puzzleType: "kaiju-bib"
@@ -625,7 +625,7 @@ const kaijuBattlePuzzles = [
     title: "第3問 母音カウント",
     body: "日本＝0　カナダ＝3　アメリカ＝2　メキシコ＝0。このときジャパン＝？",
     acceptedAnswers: ["2", "２", "二"],
-    hint: "国名を発音してみよう。母音がAのカタカナの個数を表している。",
+    hint: "発音してみよう。",
     explanation: "数は、国名を発音したときに母音がAになるカタカナの個数です。「ジャパン」にはAの音が2つあるため、答えは2です。",
     damage: 20,
     puzzleType: "kaiju-vowel"
@@ -634,7 +634,7 @@ const kaijuBattlePuzzles = [
     title: "第4問 お札の文字",
     body: "■に入る言葉はなに？　■×5＝つ　■×10＝し　つ×2＝し",
     acceptedAnswers: ["き", "キ"],
-    hint: "数字の後に『枚』をつけると分かりやすいかも。",
+    hint: "数字の後に「枚」をつけるとわかりやすいかも！！",
     explanation: "これはお札の人物を表しています。5千円札は津田梅子、1万円札は渋沢栄一なので、千円札の北里柴三郎から「き」を導きます。",
     damage: 20,
     puzzleType: "kaiju-banknote"
@@ -643,7 +643,7 @@ const kaijuBattlePuzzles = [
     title: "第5問 フィールドパズル",
     body: "FW・GK・PK・シュートの図形を読み解き、最後の攻撃コードを入力しよう。",
     acceptedAnswers: ["シュート", "しゅーと", "shoot"],
-    hint: "PDFの図形の色と、サッカー用語の位置関係を確認しよう。",
+    hint: "",
     explanation: "PDFの図形をFW・GK・PKの位置関係に当てはめると、最後の攻撃コードは「シュート」になります。",
     damage: 20,
     puzzleType: "kaiju-field"
@@ -1604,7 +1604,7 @@ function kaijuBattlePuzzleHtml(puzzle, index, status) {
         <button class="button primary" type="submit">攻撃する</button>
         <p class="answer-result" id="battle-answer-result"></p>
       </form>
-      <details class="battle-hint"><summary>ヒントを見る</summary><p>${escapeHtml(puzzle.hint)}</p></details>
+      ${puzzle.hint ? `<details class="battle-hint"><summary>ヒントを見る</summary><p>${escapeHtml(puzzle.hint)}</p></details>` : ""}
     </section>`;
 }
 
