@@ -1179,7 +1179,7 @@ function finalPuzzleHtml(completed, index) {
         <p>${escapeHtml(puzzle.lead)}</p>
       </div>
       ${finalPuzzleVisualHtml(puzzle)}
-      <p><strong>問題:</strong> ${escapeHtml(puzzle.body)}</p>
+      ${puzzle.puzzleType === "final-rps" ? "" : `<p><strong>問題:</strong> ${escapeHtml(puzzle.body)}</p>`}
       <form id="final-answer-form" data-step="${index}">
         <label for="final-answer-input">作戦コード</label>
         <input id="final-answer-input" name="answer" autocomplete="off" placeholder="答えを入力" />
@@ -1202,7 +1202,7 @@ function finalPuzzleVisualHtml(puzzle) {
 function finalFigureHtml(className, diagram, caption, mobileDiagram = "") {
   return '<figure class="final-visual final-figure ' + className + '">' +
     '<div class="final-figure-scroll">' + diagram + mobileDiagram + '</div>' +
-    '<figcaption class="final-figure-caption">' + caption + '</figcaption>' +
+    (caption ? '<figcaption class="final-figure-caption">' + caption + '</figcaption>' : '') +
   '</figure>';
 }
 
@@ -1292,41 +1292,13 @@ function finalZodiacVisualHtml() {
 }
 
 function finalPianoVisualHtml() {
-  const diagram = [
-    '<svg class="final-figure-svg final-piano-svg" viewBox="0 0 800 580" preserveAspectRatio="xMidYMid meet" role="img" aria-label="叫ぶ人がフォルテf、静かにする人が何を表すかを考える問題">',
-      '<rect class="diagram-paper" x="18" y="18" width="764" height="544" rx="4" />',
-      '<g class="piano-row">',
-        '<circle class="piano-face" cx="155" cy="132" r="43" /><path class="piano-hair" d="M113 114Q155 64 197 114V97Q155 52 113 97z" />',
-        '<path class="piano-body" d="M103 219Q155 172 207 219L225 282H85z" /><path class="piano-mouth" d="M135 154Q155 185 175 154" />',
-        '<path class="sound-wave" d="M58 117l-25 18 25 18-25 18M76 100l-28 20 28 20-28 20" />',
-        '<path class="piano-arrow" d="M290 150H507M470 108l48 42-48 42" /><text class="piano-symbol" x="620" y="188">f</text>',
-        '<text class="piano-label" x="96" y="310">大声で叫ぶ</text><text class="piano-label" x="612" y="258">フォルテ</text>',
-      '</g>',
-      '<g class="piano-row">',
-        '<circle class="piano-face" cx="155" cy="390" r="43" /><path class="piano-hair" d="M113 372Q155 322 197 372V355Q155 310 113 355z" />',
-        '<path class="piano-body" d="M103 477Q155 430 207 477L225 530H85z" /><path class="quiet-finger" d="M178 422l11-69M178 422l-20-28" />',
-        '<path class="piano-arrow" d="M290 407H507M470 365l48 42-48 42" /><text class="piano-symbol piano-symbol--question" x="624" y="454">?</text>',
-        '<text class="piano-label" x="105" y="548">静かにする</text><text class="piano-label" x="595" y="530">？</text>',
-      '</g>',
-    '</svg>'
-  ].join("");
-  return finalFigureHtml("final-piano-figure", diagram, '<strong>図の読み方：</strong>上段の<strong>f</strong>は「強く」を表すフォルテ。下段の静かな仕草が表す音楽記号を考えよう。', finalPianoMobileHtml());
+  const diagram = '<img class="final-source-image final-piano-source" src="assets/puzzles/final-piano-pdf.png" width="1344" height="954" alt="大声で叫ぶとフォルテf、静かにする場合の音楽記号を考える問題" />';
+  return finalFigureHtml("final-piano-figure final-source-figure", diagram, '<strong>図の読み方：</strong>上段の<strong>f</strong>は「強く」を表すフォルテ。下段の静かな仕草が表す音楽記号を考えよう。');
 }
 
 function finalRpsVisualHtml() {
-  const diagram = [
-    '<svg class="final-figure-svg final-rps-svg" viewBox="0 0 800 380" preserveAspectRatio="xMidYMid meet" role="img" aria-label="チョキ、グー、パーの勝敗と指の数からローマ字を導く問題">',
-      '<defs><marker id="final-rps-arrow" viewBox="0 0 12 12" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L12,6 L0,12z" fill="#173023" /></marker></defs>',
-      '<rect class="diagram-paper" x="18" y="18" width="764" height="344" rx="4" />',
-      '<text class="rps-title" x="70" y="66">＜ は「勝てる」と考えよう</text>',
-      '<g class="rps-card"><rect x="78" y="102" width="178" height="116" rx="8" /><text x="118" y="150">C = 2</text><text class="rps-small" x="108" y="190">チョキ / 指2本</text></g>',
-      '<g class="rps-card"><rect x="312" y="102" width="178" height="116" rx="8" /><text x="352" y="150">G = 0</text><text class="rps-small" x="345" y="190">グー / 指0本</text></g>',
-      '<g class="rps-card rps-card--answer"><rect x="546" y="102" width="178" height="116" rx="8" /><text x="582" y="150">？ = 5</text><text class="rps-small" x="584" y="190">？ / 指5本</text></g>',
-      '<path class="rps-cycle" d="M256 160H302M490 160H536M636 232C560 310 238 310 164 232" marker-end="url(#final-rps-arrow)" />',
-      '<text class="rps-cycle-label" x="317" y="342">？ ＜ C　　C ＜ G　　G ＜ ？</text>',
-    '</svg>'
-  ].join("");
-  return finalFigureHtml("final-rps-figure", diagram, '<strong>図の読み方：</strong>C＝チョキ、G＝グー。勝敗の輪と<strong>5本の指</strong>を手がかりに、残るローマ字を答えよう。', finalRpsMobileHtml());
+  const diagram = '<img class="final-source-image final-rps-source" src="assets/puzzles/final-rps-pdf.png" width="617" height="211" alt="第4問のC、G、？のローマ字を考える問題" />';
+  return finalFigureHtml("final-rps-figure final-source-figure", diagram, "");
 }
 
 function finalWeakpointVisualHtml() {
@@ -2356,8 +2328,8 @@ function puzzleHtml(step) {
       <div class="puzzle-panel toko-circuit-file toko-password-file">
         <div class="puzzle-file-header"><span>FIRE LINK ARCHIVE</span><strong>MEMORY 01</strong></div>
         <figure class="toko-pdf-reference">
-          <img src="assets/puzzles/toko-first-pdf.png" width="1192" height="1684" alt="東興アイテック第1問のPDF原図。番号付き文字列と空欄文が描かれている" />
-          <figcaption>PDFの問題画像</figcaption>
+          <img src="assets/puzzles/toko-first-pdf.png" width="655" height="501" alt="東興アイテック第1問の番号付き文字列と空欄文" />
+          <figcaption>１２３診断し、４５６還元する。</figcaption>
         </figure>
       </div>
     `;
