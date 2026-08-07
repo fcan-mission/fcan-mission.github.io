@@ -2042,6 +2042,32 @@ img.mission-character {
   font-weight: 950;
 }
 
+.morikawa-seal-images {
+  display: grid;
+  gap: 14px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.morikawa-seal-images figure {
+  margin: 0;
+  overflow: hidden;
+  background: #fffefa;
+  border: 2px solid rgba(23, 48, 35, 0.78);
+  border-radius: 10px;
+}
+
+.morikawa-seal-images img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+@media (max-width: 620px) {
+  .morikawa-seal-images {
+    grid-template-columns: 1fr;
+  }
+}
+
 .morikawa-rescue {
   gap: 16px;
 }
@@ -5328,6 +5354,15 @@ img.mission-character {
   filter: drop-shadow(0 0 20px var(--accent)) drop-shadow(10px 12px 0 rgba(0, 0, 0, 0.34));
 }
 
+.cinematic-battle.is-hit .active-hero-character {
+  transform-origin: 65% 75%;
+  animation: heroAttackLunge 1.05s cubic-bezier(.15, .75, .18, 1) both;
+}
+
+.cinematic-battle.is-hit .active-hero-cutin {
+  animation: cutinSlam 420ms cubic-bezier(0.16, 0.9, 0.26, 1) both, attackRecoil 1.05s ease-out both;
+}
+
 .active-hero-cutin strong {
   justify-self: start;
   max-width: 13em;
@@ -5357,6 +5392,23 @@ img.mission-character {
   box-shadow: 5px 5px 0 #000;
   font-size: clamp(14px, 3.8vw, 18px);
   animation: subtitlePunch 2.25s ease-out both;
+}
+
+/* 攻撃カットイン中は、ヒーロー名とダメージ表示を別の位置に置く。 */
+.cinematic-battle .battle-arena:has(.active-hero-cutin) .battle-action-text {
+  left: 54%;
+  right: 4%;
+  bottom: 16px;
+  padding: 10px;
+  font-size: clamp(12px, 3.2vw, 16px);
+}
+
+@media (max-width: 560px) {
+  .cinematic-battle .battle-arena:has(.active-hero-cutin) .battle-action-text {
+    left: 52%;
+    right: 3%;
+    bottom: 12px;
+  }
 }
 
 .cinematic-battle .battle-effect {
@@ -5572,6 +5624,19 @@ img.mission-character {
   0%, 100% { transform: translateX(0); filter: none; }
   18%, 54% { transform: translateX(-20px); filter: brightness(2.5) sepia(1) saturate(8); }
   36%, 72% { transform: translateX(18px); filter: brightness(1.5) sepia(1) saturate(5); }
+}
+
+@keyframes heroAttackLunge {
+  0% { transform: translate(-24%, 9%) rotate(-8deg) scale(.86); opacity: 0; }
+  38% { transform: translate(18%, -6%) rotate(5deg) scale(1.12); opacity: 1; }
+  68% { transform: translate(10%, -3%) rotate(2deg) scale(1.05); }
+  100% { transform: translate(0) rotate(0) scale(1); }
+}
+
+@keyframes attackRecoil {
+  0%, 35% { filter: brightness(1); }
+  48% { filter: brightness(1.8); }
+  100% { filter: brightness(1); }
 }
 
 .match-form {

@@ -704,10 +704,9 @@ const STORAGE_KEYS = {
   final: "fcan.finalUnlocked"
 };
 
-// 一時的な画面確認用。企業ミッション未クリアでも最終暗号だけを試せるようにする。
-const FINAL_BATTLE_TEST_MODE = true;
-// 当日は怪獣討伐編を単独でも体験できるよう、前提ミッションをスキップする。
-const DIRECT_KAIJU_BATTLE_MODE = true;
+// 5人のヒーローを集めた後に、怪獣の弱点を探す最終暗号を解放する。
+const FINAL_BATTLE_TEST_MODE = false;
+const DIRECT_KAIJU_BATTLE_MODE = false;
 
 const state = {
   participant: readJson(STORAGE_KEYS.participant, null),
@@ -1588,7 +1587,10 @@ function kaijuCompletionRecordHtml() {
 }
 
 function kaijuBattlePuzzleHtml(puzzle, index, status) {
-  if (status === "hit") return `<section class="battle-question battle-question-hit"><strong>HIT! −${puzzle.damage} HP</strong><p>ナゾゴラに攻撃が命中した！</p><div class="battle-explanation"><b>解説</b><p>${escapeHtml(puzzle.explanation)}</p></div></section>`;
+  if (status === "hit") {
+    const isLastAttack = getKaijuBattleIndex() >= kaijuBattlePuzzles.length;
+    return `<section class="battle-question battle-question-hit"><strong>HIT! −${puzzle.damage} HP</strong><p>ナゾゴラに攻撃が命中した！</p><button class="button primary" type="button" data-action="continue-kaiju-battle">${isLastAttack ? "討伐結果を見る" : "次の問題へ"}</button></section>`;
+  }
   const visual = puzzle.puzzleType === "kaiju-keyboard"
     ? `<div class="kaiju-puzzle-visual cipher"><span>nazotoki</span><b>→</b><span>msxpyplo</span><span>？</span><b>→</b><span>dpvvrt</span></div>`
     : puzzle.puzzleType === "kaiju-bib"
@@ -1630,24 +1632,34 @@ function checkKaijuBattleAnswer(index, rawAnswer) {
     result.textContent = "攻撃コードが違う。問題とヒントをもう一度確認しよう。";
     return;
   }
-  state.steps.kaijuBattle = index + 1;
-  saveState();
-  if (index + 1 >= kaijuBattlePuzzles.length) recordKaijuCompletion();
-  battleState.lastHitPuzzle = puzzle;
-  battleState.lastHitIndex = index;
-  battleState.status = "hit";
-  renderKaijuBattle(true);
-  clearBattleTimer();
-  battleState.timer = window.setTimeout(() => {
-    if (getKaijuBattleIndex() >= kaijuBattlePuzzles.length) {
-      battleState.status = "victory";
-    } else {
-      battleState.status = "playing";
+  showClearResult({
+    title: puzzle.title,
+    message: "攻撃コードを解析完了。解説を確認して、攻撃を開始しよう。",
+    explanation: puzzle.explanation,
+    continueLabel: "攻撃を開始",
+    onContinue: () => {
+      state.steps.kaijuBattle = index + 1;
+      saveState();
+      if (index + 1 >= kaijuBattlePuzzles.length) recordKaijuCompletion();
+      battleState.lastHitPuzzle = puzzle;
+      battleState.lastHitIndex = index;
+      battleState.status = "hit";
+      renderKaijuBattle(true);
     }
-    battleState.lastHitPuzzle = null;
-    battleState.lastHitIndex = -1;
-    renderKaijuBattle(true);
-  }, window.matchMedia("(prefers-reduced-motion: reduce)").matches ? 300 : 1100);
+  });
+}
+
+function continueKaijuBattle() {
+  if (battleState.status !== "hit") return;
+  clearBattleTimer();
+  if (getKaijuBattleIndex() >= kaijuBattlePuzzles.length) {
+    finishBattle();
+    return;
+  }
+  battleState.status = "playing";
+  battleState.lastHitPuzzle = null;
+  battleState.lastHitIndex = -1;
+  renderKaijuBattle(true);
 }
 
 function handleDocumentClick(event) {
@@ -1667,6 +1679,7 @@ function handleDocumentClick(event) {
   if (action === "start-battle" || action === "replay-battle") return startFinalBattle();
   if (action === "skip-battle") return finishBattle();
   if (action === "start-kaiju-battle") return startKaijuBattle();
+  if (action === "continue-kaiju-battle") return continueKaijuBattle();
   if (action === "replay-kaiju-battle") {
     state.steps.kaijuBattle = 0;
     saveState();
@@ -1805,7 +1818,7 @@ function checkAnswer(id, rawAnswer) {
       state.recentUnlock = mission.id;
       saveState();
       renderMission(mission.id);
-      if (!wasUnlocked) showHeroUnlock(mission);
+      if (!wasUnlocked) showHeroUnlock(mission, state.unlocked.size === missions.length);
     }
   });
 }
@@ -1841,7 +1854,7 @@ function continueAfterClear() {
   onContinue?.();
 }
 
-function showHeroUnlock(mission) {
+function showHeroUnlock(mission, autoAdvanceToFinal = false) {
   document.querySelector(".unlock-modal")?.remove();
   const modal = el("div", "unlock-modal");
   modal.setAttribute("role", "dialog");
@@ -1859,13 +1872,20 @@ function showHeroUnlock(mission) {
         <div class="unlock-next-actions">
           <button class="button primary" type="button" data-action="follow-company" data-id="${mission.id}" aria-label="${escapeAttribute(mission.companyName)}をフォロー">会社をフォローする</button>
         </div>
-        <a class="button ghost" href="#missions" data-action="close-unlock">次のヒーローを探す</a>
+        <a class="button ghost" href="${autoAdvanceToFinal ? "#clear" : "#missions"}" data-action="close-unlock">${autoAdvanceToFinal ? "最終決戦へ進む" : "次のヒーローを探す"}</a>
       </div>
     </article>
   `;
   document.body.append(modal);
   startUnlockVideo(modal);
   modal.querySelector("button")?.focus();
+  if (autoAdvanceToFinal) {
+    window.setTimeout(() => {
+      if (!modal.isConnected) return;
+      closeHeroUnlock();
+      location.hash = "#clear";
+    }, 4000);
+  }
 }
 
 function unlockCinematicHtml(mission) {
@@ -2409,6 +2429,10 @@ function puzzleHtml(step) {
   if (step.puzzleType === "morikawa-seal") {
     return `
       <div class="puzzle-panel morikawa-seal">
+        <div class="morikawa-seal-images" aria-label="四角と丸の手がかり画像">
+          <figure><img src="assets/puzzles/morikawa-video-clue.png" width="1100" height="563" alt="赤い四角がある動画の手がかり画像" /></figure>
+          <figure><img src="assets/puzzles/morikawa-circle-clue.png" width="1100" height="667" alt="青い丸と社訓の手がかり画像" /></figure>
+        </div>
         <div class="shape-expression" aria-label="赤い四角 の 青い丸 黄色い三角">
           <span class="shape square red"></span>
           <strong>の</strong>
