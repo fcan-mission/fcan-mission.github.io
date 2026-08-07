@@ -3699,7 +3699,69 @@ img.mission-character {
 }
 
 .answer-result.ng {
-  color: var(--red);
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 4px 10px;
+  align-items: center;
+  padding: 14px 16px;
+  color: #9f161c;
+  background: #fff0f0;
+  border: 3px solid var(--red);
+  border-radius: 10px;
+  box-shadow: 4px 4px 0 rgba(159, 22, 28, 0.22);
+  animation: wrongAnswerShake 360ms ease-out;
+}
+
+.answer-result.ng::before {
+  content: "!";
+  display: grid;
+  grid-row: span 2;
+  width: 30px;
+  height: 30px;
+  place-items: center;
+  color: #fff;
+  background: var(--red);
+  border-radius: 50%;
+  font-size: 21px;
+  font-weight: 950;
+}
+
+.answer-result.ng strong {
+  font-size: 18px;
+  line-height: 1.1;
+}
+
+.answer-result.ng span {
+  grid-column: 2;
+  font-size: 14px;
+  line-height: 1.45;
+}
+
+@keyframes wrongAnswerShake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  75% { transform: translateX(5px); }
+}
+
+.toko-pdf-reference {
+  width: min(100%, 560px);
+  margin: 18px auto 0;
+}
+
+.toko-pdf-reference img {
+  display: block;
+  width: 100%;
+  height: auto;
+  background: #fff;
+  border: 3px solid #173023;
+}
+
+.toko-pdf-reference figcaption {
+  margin-top: 7px;
+  color: rgba(255, 254, 250, 0.85);
+  font-size: 12px;
+  font-weight: 850;
+  text-align: center;
 }
 
 .company-profile {

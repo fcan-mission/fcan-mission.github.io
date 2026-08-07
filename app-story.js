@@ -24,10 +24,6 @@ const missions = [
     accent: "#e95b3c",
     website: "http://www.syoudai.jp/",
     recruitUrl: "http://www.syoudai.jp/recruit.php",
-    unlockVideo: {
-      src: "assets/videos/shodai-join-demo.mp4",
-      poster: "assets/videos/shodai-join-demo-poster.jpg"
-    },
     missionTitle: "鉄骨ロック解除コード",
     storyIntro:
       "強固な鉄の骨組みを操り、街の巨大な建物を支えるヒーロー「ショウダイ」の拠点にたどり着いた。ロック解除コードを得るには、翔大鋼業のホームページと暗号の骨組みを順番に解析する必要がある。",
@@ -83,11 +79,11 @@ const missions = [
           tone: "alert",
           text: "あぶない！ 建物が倒れてくる！ 謎を解いてショウダイのパワーで建物の内側の鉄筋を建て直してくれ！"
         },
-        lead: "曜日を漢字に直し、その画数が多角形の辺の数を表すと考えよう。金曜日に対応する形を復元せよ。",
-        body: "？に入る数字はなんだろう？",
-        acceptedAnswers: ["金の8角形", "金の８角形", "金の八角形", "8角形", "８角形", "八角形", "きんの8かくけい", "きんのはちかくけい"],
+        lead: "金曜日に対応する形を復元せよ。",
+        body: "？に入るのはどんな形だろう？",
+        acceptedAnswers: ["八", "８"],
         hints: [
-          "曜日を漢字にして、画数を数えてみよう。",
+          "曜日を漢字にして画数を数えてみよう！",
           "日・月・火・水・木は4画なので四角、土は3画なので三角です。",
           "金は8画。答えは「金の8角形」。"
         ],
@@ -241,7 +237,7 @@ const missions = [
         lead: "船舶の建造、艦艇や商船の各種検査・修理、鉄構機械の製作。函館どっくが選ばれ続けるために進化させ続けている、一番の強みを探そう。",
         body: "船舶の建造、艦艇や商船の各種検査・修理、鉄構機械の製作などの分野において、お客様に選ばれ続けるための進化させ続けている一番の強みとは？ A.『〇〇〇』",
         acceptedAnswers: ["技術力", "ぎじゅつりょく", "ギジュツリョク"],
-        hints: ["公式サイトの会社紹介で、技術や品質に関わる言葉を探そう。", "漢字3文字では『技術力』。", "ひらがななら『ぎじゅつりょく』。"],
+        hints: ["ホームページを見てみよう。", "漢字3文字では『技術力』。", "ひらがななら『ぎじゅつりょく』。"],
         clearMessage: "技術コアを再起動。次は、港を越えて活躍する力を探そう。",
         puzzleType: "dock-core"
       },
@@ -254,7 +250,7 @@ const missions = [
         lead: "ヒーローの武器が隠されてしまった。『王冠、ヘッドフォン、はちまき』に共通する言葉を手がかりに、武器を選べ。",
         body: "以下の3つの言葉の法則性を見つけ出し、どれが武器なのか3つから選ぶんだ！ 王冠、ヘッドフォン、はちまき／1. 安全靴　2. ヘルメット　3. シールド",
         acceptedAnswers: ["ヘルメット", "へるめっと"],
-        hints: ["3つの言葉に共通するのは、身につける場所です。", "王冠、ヘッドフォン、はちまきは頭につけます。", "答えは『ヘルメット』。"],
+        hints: ["３つの言葉はどこに身に着けるもの？", "王冠、ヘッドフォン、はちまきは頭につけます。", "答えは『ヘルメット』。"],
         clearMessage: "武器を回収。新造船の記録と合言葉を解読しよう。",
         puzzleType: "dock-weapon"
       },
@@ -271,7 +267,7 @@ const missions = [
         lead: "新造船で建造する『内航フェリーと貨物船』、会社名『はこだてどっく』の記録を使い、必殺技の合言葉を復元せよ。",
         body: "B2＋の＋C6゛＋C7＋A5＝？",
         acceptedAnswers: ["ものづくり", "モノヅクリ", "物づくり", "物作り"],
-        hints: ["暗号メモでは、A＝ぎじゅつりょく、C＝かもつせん、D＝はこだてどっくです。", "C2＋の＋A4゛＋D7＋A5 を順番に読もう。", "答えは『ものづくり』。"],
+        hints: ["函館どつくのキャッチコピーの「ここにしかない「〇の〇〇〇」」", "C2＋の＋A4゛＋D7＋A5 を順番に読もう。", "答えは『ものづくり』。"],
         clearMessage: "必殺技の合言葉は「ものづくり」だ！ 港の安全ロックに残る最後の警報を解除しよう。",
         puzzleType: "dock-password"
       },
@@ -290,7 +286,7 @@ const missions = [
         body: "■に入る数字はなに？ 2＝28　7－6＝1　9－2＝3　12－5＝■",
         acceptedAnswers: ["0", "０", "零", "れい", "ゼロ"],
         hints: [
-          "7月は31日、6月は30日なので、最初の式は1になります。",
+          "左の数字は月を表している",
           "8月と7月、11月と9月はそれぞれ同じ日数です。",
           "12月も5月も31日。答えは0。"
         ],
@@ -530,16 +526,17 @@ const puzzleExplanations = {
 const pdfHints = {
   "shodai-trade": ["翔大鋼業のホームページを調査せよ！"],
   "steel-grid": ["暗号の骨組みの中の12345ヒントから当てはまる単語を入れて①②③④⑤⑥⑦を見つけろ！"],
+  "shodai-miniboss": ["曜日を漢字にして画数を数えてみよう！"],
   "morikawa-identity": ["右のヘルメットで身を守り、左のエンブレムのもと活動していた函館のヒーローだ。"],
   "morikawa-seal": ["一つ目のヒントで得た企業の公式サイトを見ながら下の言葉を完成させよ。"],
   "morikawa-rescue": ["ある：FW（フォワード）、MF（ミッドフィルダー）、FK（フリーキック）、HT（ハーフタイム）／なし：GK（ゴールキーパー）、DF（ディフェンダー）、PK（ペナルティキック）、VAR"],
-  "dock-core": ["船舶の建造、艦艇や商船の各種検査・修理、鉄構機械の製作などの分野において、お客様に選ばれ続けるための一番の強みとは？"],
-  "dock-weapon": ["王冠、ヘッドフォン、はちまき。以下の3つの言葉の法則性を見つけ出し、どれが武器なのか選ぶんだ！"],
-  "dock-password": ["B2＋の＋C6゛＋C7＋A5＝？"],
-  "dock-miniboss": ["2＝28、7－6＝1、9－2＝3、12－5＝■。"],
+  "dock-core": ["ホームページを見てみよう。"],
+  "dock-weapon": ["３つの言葉はどこに身に着けるもの？"],
+  "dock-password": ["函館どつくのキャッチコピーの「ここにしかない「〇の〇〇〇」」"],
+  "dock-miniboss": ["左の数字は月を表している"],
   "century-cruising": ["日常を離れ、ひとときのプライベート・〇〇〇〇〇〇が叶う場所。"],
   "century-scenery": ["このヒーローは本拠地の客室や露天風呂から見える景色がとてもいいんだ！ 函館の特徴でもある夜景や海を最大限に生かしたおもてなしをしているんだ！"],
-  "toko-message": ["123診断し、456還元する。"],
+  "toko-message": ["画像をカメラで読み込むんだ！"],
   "toko-diagnosis": ["建物を長持ちさせるために、彼らがまず行う工程は？"],
   "toko-compass": ["これが最後のロックだ。以下の謎を解き明かし、彼らが背負うべき本当の名前を覚醒させるんだ！"],
   "toko-flick-boss": ["12マスのグリッドを解析せよ！"],
@@ -1775,7 +1772,7 @@ function checkAnswer(id, rawAnswer) {
   result.classList.toggle("ok", ok);
   result.classList.toggle("ng", !ok);
   if (!ok) {
-    result.textContent = "通信がまだ安定しない……。企業のページにもう一つ手がかりがありそうだ。";
+    result.innerHTML = "<strong>不正解です</strong><span>問題とヒントをもう一度確認して、再挑戦しよう。</span>";
     return;
   }
 
@@ -2229,13 +2226,12 @@ function puzzleHtml(step) {
     return `
       <div class="puzzle-panel steel-boss-panel">
         <div class="boss-alert"><span>MINI BOSS / BUILDING COLLAPSE</span><strong>崩落ロック警報</strong></div>
-        <p>曜日を漢字に変え、画数と同じ辺の数を持つ多角形に置き換えよう。</p>
         <div class="weekday-shapes" aria-label="曜日を漢字と多角形に置き換える問題">
           ${weekdays
             .map(([english, kanji, shape]) => `<span><small>${english}</small><b>${kanji}</b><i>${shape}</i></span>`)
             .join("")}
         </div>
-        <div class="shape-question"><span>金曜日</span><b>→</b><strong>？角形</strong></div>
+        <div class="shape-question"><span>金曜日</span><b>→</b><strong>？</strong></div>
       </div>
     `;
   }
@@ -2337,39 +2333,13 @@ function puzzleHtml(step) {
   }
 
   if (step.puzzleType === "toko-message") {
-    const codeStrip = (numbers) => `
-      <div class="toko-password-code-strip" aria-hidden="true">
-        ${numbers
-          .map((number) => `<span class="${number ? "is-number" : ""}">${number || ""}</span>`)
-          .join("")}
-      </div>
-    `;
-    const wordSlots = (count) => `
-      <span class="toko-password-word" style="--slot-count:${count}" aria-hidden="true">
-        ${"<i></i>".repeat(count)}
-      </span>
-    `;
     return `
       <div class="puzzle-panel toko-circuit-file toko-password-file">
         <div class="puzzle-file-header"><span>FIRE LINK ARCHIVE</span><strong>MEMORY 01</strong></div>
-        <section class="toko-password-figure" role="img" aria-label="2つの番号付き文字列と、2つの句に分かれた空欄文が並ぶ第1セキュリティの暗号図">
-          <p class="toko-password-figure-title">第1セキュリティ / 文字列照合</p>
-          <div class="toko-password-reference" aria-hidden="true">QR / 参照画像を確認</div>
-          <div class="toko-password-code-groups">
-            ${codeStrip(["1", "2", "", "", "", "3"])}
-            ${codeStrip(["4", "5", "", "", "", "6"])}
-          </div>
-          <div class="toko-password-sentence" aria-hidden="true">
-            <div class="toko-password-clause">
-              ${wordSlots(3)}${wordSlots(2)}${wordSlots(1)}<b>、</b>
-            </div>
-            <div class="toko-password-clause">
-              ${wordSlots(3)}${wordSlots(2)}${wordSlots(2)}<b>。</b>
-            </div>
-          </div>
-          <p class="toko-password-instruction">企業ページの文章を見つけ、番号の文字を①から⑥の順に読もう。</p>
-        </section>
-        <p>下の空欄文を完成させると、ヒーローが取り戻すべき使命が現れます。</p>
+        <figure class="toko-pdf-reference">
+          <img src="assets/puzzles/toko-first-pdf.png" width="1192" height="1684" alt="東興アイテック第1問のPDF原図。番号付き文字列と空欄文が描かれている" />
+          <figcaption>PDFの問題画像</figcaption>
+        </figure>
       </div>
     `;
   }
