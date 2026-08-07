@@ -686,6 +686,14 @@ const characterAssets = {
   }
 };
 
+const lockedCharacterAssets = {
+  shodai: { src: "assets/characters/scout-steel-silhouette.png", width: 941, height: 1672 },
+  morikawa: { src: "assets/characters/scout-city-silhouette.png", width: 1024, height: 1536 },
+  dock: { src: "assets/characters/scout-dock-silhouette.png", width: 926, height: 1698 },
+  toko: { src: "assets/characters/scout-fire-silhouette.png", width: 885, height: 1777 },
+  century: { src: "assets/characters/scout-healer-silhouette.png", width: 908, height: 1732 }
+};
+
 const STORAGE_KEYS = {
   participant: "fcan.participant",
   unlocked: "fcan.clear",
@@ -932,7 +940,7 @@ function firebaseSetupNoticeHtml() {
 function renderMissions() {
   renderTemplate("missions-template");
   document.querySelector("#progress-label").textContent = `${state.unlocked.size} / ${missions.length} clear`;
-  document.querySelector(".mission-toolbar").insertAdjacentHTML("afterend", `${memberNoticeHtml()}${heroCollectionPanelHtml("compact")}`);
+  document.querySelector(".mission-toolbar").insertAdjacentHTML("afterend", memberNoticeHtml());
   const grid = document.querySelector("#mission-grid");
   grid.replaceChildren(
     ...missions.map((mission) => {
@@ -944,7 +952,7 @@ function renderMissions() {
       const card = el("article", `mission-card reveal ${unlocked ? "is-clear" : "is-locked-card"}`);
       card.style.setProperty("--accent", mission.accent);
       card.innerHTML = `
-        ${characterSvg(mission.character, "mission-character", unlocked ? mission.heroName : "")}
+        ${missionCharacterHtml(mission, unlocked, "mission-character", unlocked ? mission.heroName : "")}
         <div class="tag-row">
           <span class="tag status ${unlocked ? "clear" : inProgress ? "progress" : ""}">${statusLabel}</span>
           <span class="tag">${stars(mission.difficulty)}</span>
@@ -959,6 +967,7 @@ function renderMissions() {
       return card;
     })
   );
+  grid.insertAdjacentHTML("afterend", heroCollectionPanelHtml("compact"));
 }
 
 function renderMission(id) {
@@ -2156,7 +2165,7 @@ function heroCollectionHtml(mode = "full") {
             ${
               unlocked
                 ? characterSvg(mission.character, "hero-slot-character", mission.heroName)
-                : `${characterSvg(mission.character, "hero-slot-character is-locked-character", "")}<span class="hero-slot-lock">?</span>`
+                : `${missionCharacterHtml(mission, false, "hero-slot-character", "")}<span class="hero-slot-lock">?</span>`
             }
           </div>
           <div class="hero-slot-body">
@@ -2179,6 +2188,13 @@ function renderFixedProgress() {
   const progressLabel = unlockedCount ? `ヒーロー ${unlockedCount}人を解放` : "企業ヒーロー探索中";
   bar.innerHTML = `<strong>${unlockedCount} / ${missions.length} clear</strong><span>${progressLabel}</span>`;
   document.body.append(bar);
+}
+
+function missionCharacterHtml(mission, unlocked, className = "character-icon", label = "") {
+  if (unlocked) return characterSvg(mission.character, className, label);
+  const asset = lockedCharacterAssets[mission.id];
+  if (!asset) return characterSvg(mission.character, `${className} is-locked-character`, "");
+  return `<img class="${className} character-art is-silhouette" src="${escapeAttribute(asset.src)}" width="${asset.width}" height="${asset.height}" alt="" aria-hidden="true" loading="lazy" decoding="async" />`;
 }
 
 function memberNoticeHtml() {

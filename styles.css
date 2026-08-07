@@ -4179,6 +4179,11 @@ img.mission-character {
   filter: grayscale(1) brightness(0.72) contrast(1.12) drop-shadow(3px 4px 0 rgba(23, 48, 35, 0.12));
 }
 
+.hero-slot-character.is-silhouette {
+  opacity: 1;
+  filter: drop-shadow(3px 4px 0 rgba(23, 48, 35, 0.12));
+}
+
 .hero-slot-lock {
   position: absolute;
   right: 2px;
