@@ -2906,6 +2906,15 @@ img.mission-character {
 /* The piano clue is intentionally tall, so keep it from dominating the page. */
 .final-piano-svg { max-width: 700px; }
 
+/* 第4問は画像だけを手がかりにするため、表示領域を大きく取る。 */
+.final-rps-figure .final-figure-scroll {
+  padding: 4px;
+}
+
+.final-rps-figure .final-source-image {
+  max-width: 1000px;
+}
+
 .final-figure-mobile { display: none; }
 
 .final-figure-caption {

@@ -532,7 +532,7 @@ const pdfHints = {
   "dock-miniboss": ["左の数字は月を表している"],
   "century-cruising": ["ホームページを調べよう。"],
   "century-scenery": ["このヒーローは本拠地の客室や露天風呂から見える景色がとてもいいんだ！ 函館の特徴でもある夜景や海を最大限に生かしたおもてなしをしているんだ！"],
-  "century-meal": [],
+  "century-meal": ["50音順で、文字を前後に動かそう。"],
   "toko-message": ["ホームページを確認しよう。"],
   "toko-diagnosis": ["ホームページを確認しよう。"],
   "toko-compass": ["床の方角とイラストの表すものと四角の色の関係を考えてみると？"],
@@ -577,9 +577,9 @@ const finalPuzzles = [
     puzzleType: "final-piano"
   },
   {
-    title: "第4問 じゃんけんコード",
-    lead: "もう一つの鍵も同じローマ字を表している。じゃんけんの関係から、？に入る手を導こう。",
-    body: "問題4　？に当てはまるローマ字はなんだ！",
+    title: "第4問",
+    lead: "",
+    body: "",
     acceptedAnswers: ["P", "p", "パー"],
     hints: ["＜は『勝てる』と考えよう。", "Cはチョキ、Gはグーを表しています。", "残る手はパー。答えは P。"],
     clearMessage: "Pが2つそろった。会場パンフレットの2つのPを重ねるように折り、弱点の指示を探そう。",
@@ -1166,11 +1166,11 @@ function finalPuzzleHtml(completed, index) {
   const hintCount = getFinalHintCount(index);
   return `
     <section class="final-puzzle" style="--accent:${index === 2 ? "#e45336" : "#ffd34d"}">
-      <div class="final-puzzle-copy">
+      ${puzzle.puzzleType === "final-rps" ? "" : `<div class="final-puzzle-copy">
         <p class="eyebrow dark">FINAL CODE ${index + 1} / ${finalPuzzles.length}</p>
         <h2>${escapeHtml(puzzle.title)}</h2>
         ${puzzle.lead ? `<p>${escapeHtml(puzzle.lead)}</p>` : ""}
-      </div>
+      </div>`}
       ${finalPuzzleVisualHtml(puzzle)}
       ${puzzle.puzzleType === "final-rps" ? "" : puzzle.puzzleType === "final-weakpoint" ? `<p class="final-weakpoint-question">${escapeHtml(puzzle.body)}</p>` : `<p><strong>問題:</strong> ${escapeHtml(puzzle.body)}</p>`}
       <form id="final-answer-form" data-step="${index}">
