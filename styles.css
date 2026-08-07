@@ -333,6 +333,11 @@ p {
   background: var(--chalk);
 }
 
+/* 条件付き操作の文言がない場合、ボタン枠だけを表示しない。 */
+.button:empty {
+  display: none;
+}
+
 .button.interested {
   color: var(--chalk);
   background: var(--grass);

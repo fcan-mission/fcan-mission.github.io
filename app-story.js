@@ -369,7 +369,7 @@ const missions = [
           speaker: "マリーナ・ヒーラー",
           text: "函館の海鮮や北海道の食材を生かした食事も、私の大切な力だ。特に朝食の新鮮なお刺身やいくらを思い出してくれ。"
         },
-        lead: "ひらがなを50音順で前後に動かす暗号。函館の海鮮や北海道の食材にこだわるホテルの力を呼び起こそう。",
+        lead: "函館の海鮮や北海道の食材にこだわるホテルの力を呼び起こそう。",
         body: "問題2　さ＋1　ろ－5　お＋3　ぞ－3　〇〇〇〇",
         acceptedAnswers: ["食事", "しょくじ", "ショクジ"],
         hints: ["＋と－は50音順で進む向きです。", "さの1つ次は『し』、ろの5つ前は『よ』。", "答えは『しょくじ』。"],
@@ -532,7 +532,7 @@ const pdfHints = {
   "dock-miniboss": ["左の数字は月を表している"],
   "century-cruising": ["ホームページを調べよう。"],
   "century-scenery": ["このヒーローは本拠地の客室や露天風呂から見える景色がとてもいいんだ！ 函館の特徴でもある夜景や海を最大限に生かしたおもてなしをしているんだ！"],
-  "century-meal": ["５０音順で文字を前後に動かそう。"],
+  "century-meal": [],
   "toko-message": ["ホームページを確認しよう。"],
   "toko-diagnosis": ["ホームページを確認しよう。"],
   "toko-compass": ["ホームページを確認しよう。"],
@@ -541,7 +541,7 @@ const pdfHints = {
   "final-zodiac": ["左から早い順で動物の名前が入るよ。"],
   "final-piano": ["うるさくしている人は音楽記号のf（フォルテ）が入っているね。じゃあ静かにしている人は何をあらわしているかな？"],
   "final-rps": ["C＜Gは、GはCに勝てるというように考えよう。"],
-  "final-weakpoint": ["問題3と4の答え、つまりPとP。これはパンフレットに載っている駐車場のPを表しているよ！"]
+  "final-weakpoint": ["第3問と第4問を重ねてみよう。"]
 };
 
 function getPdfHints(puzzle) {
@@ -587,10 +587,10 @@ const finalPuzzles = [
   },
   {
     title: "第5問 怪獣の弱点",
-    lead: "第3問と第4問のPは、会場パンフレットの「駐車場P」と「臨時駐車場P」を表している。",
-    body: "問題5　3と4を重ね浮き上がる文字をよめ",
+    lead: "",
+    body: "３と４を重ね浮き上がる文字をよめ！怪獣の弱点は〇〇",
     acceptedAnswers: ["背中", "せなか", "セナカ"],
-    hints: ["第3問と第4問の答えはPとPを表します。", "会場パンフレットの地図で、駐車場と臨時駐車場のPを重ねます。", "浮かび上がる指示は『いちにもどりひらがなよめ』。迷路の経路以外のひらがなを読むと『あかよめ』です。パンフレットの赤文字を読もう。"],
+    hints: ["第3問と第4問を重ねてみよう。"],
     clearMessage: "ようやく怪獣の弱点がわかったぞ！ 怪獣の弱点は背中だ！ 最終決戦のロックを解除します。",
     puzzleType: "final-weakpoint"
   }
@@ -635,9 +635,9 @@ const kaijuBattlePuzzles = [
   },
   {
     title: "第5問 フィールドパズル",
-    body: "FW・GK・PK・シュートの図形を読み解き、最後の攻撃コードを入力しよう。",
+    body: "FW・GK・PKの図形を読み解き、最後の攻撃コードを入力しよう。",
     acceptedAnswers: ["シュート", "しゅーと", "shoot"],
-    hint: "",
+    hint: "ｄ８ーｓは変だからキーボードで別の入力方法を考えよう！",
     explanation: "PDFの図形をFW・GK・PKの位置関係に当てはめると、最後の攻撃コードは「シュート」になります。",
     damage: 20,
     puzzleType: "kaiju-field"
@@ -859,7 +859,6 @@ function renderProfile() {
         <p>${followed.length ? followed.map((mission) => escapeHtml(mission.companyName)).join("、") : "まだありません"}</p>
       </div>
       <div class="interest-row">
-        <a class="button primary" href="#missions">謎解きを始める</a>
         <button class="button ghost" type="button" data-action="edit-profile" aria-label="登録内容を編集">登録内容を編集</button>
         <button class="button ghost danger" type="button" data-action="delete-profile" aria-label="受付情報を削除">受付情報を削除</button>
         <button class="button ghost" type="button" data-action="sign-out">ログアウト</button>
@@ -1170,10 +1169,10 @@ function finalPuzzleHtml(completed, index) {
       <div class="final-puzzle-copy">
         <p class="eyebrow dark">FINAL CODE ${index + 1} / ${finalPuzzles.length}</p>
         <h2>${escapeHtml(puzzle.title)}</h2>
-        <p>${escapeHtml(puzzle.lead)}</p>
+        ${puzzle.lead ? `<p>${escapeHtml(puzzle.lead)}</p>` : ""}
       </div>
       ${finalPuzzleVisualHtml(puzzle)}
-      ${puzzle.puzzleType === "final-rps" ? "" : `<p><strong>問題:</strong> ${escapeHtml(puzzle.body)}</p>`}
+      ${puzzle.puzzleType === "final-rps" ? "" : puzzle.puzzleType === "final-weakpoint" ? `<p class="final-weakpoint-question">${escapeHtml(puzzle.body)}</p>` : `<p><strong>問題:</strong> ${escapeHtml(puzzle.body)}</p>`}
       <form id="final-answer-form" data-step="${index}">
         <label for="final-answer-input">作戦コード</label>
         <input id="final-answer-input" name="answer" autocomplete="off" placeholder="答えを入力" />
@@ -1190,7 +1189,7 @@ function finalPuzzleVisualHtml(puzzle) {
   if (puzzle.puzzleType === "final-zodiac") return finalZodiacVisualHtml();
   if (puzzle.puzzleType === "final-piano") return finalPianoVisualHtml();
   if (puzzle.puzzleType === "final-rps") return finalRpsVisualHtml();
-  return finalWeakpointVisualHtml();
+  return "";
 }
 
 function finalFigureHtml(className, diagram, caption, mobileDiagram = "") {
@@ -1637,6 +1636,7 @@ function handleDocumentClick(event) {
   if (action === "start-battle" || action === "replay-battle") return startFinalBattle();
   if (action === "skip-battle") return finishBattle();
   if (action === "start-kaiju-battle") return startKaijuBattle();
+  if (action === "complete-final-weakpoint") return completeFinalWeakpoint();
   if (action === "continue-kaiju-battle") return continueKaijuBattle();
   if (action === "replay-kaiju-battle") {
     state.steps.kaijuBattle = 0;
@@ -1703,7 +1703,7 @@ function showStoryAccessDialog() {
         <input id="story-access-password" name="password" type="password" autocomplete="off" required />
         <p class="form-error" id="story-access-error" role="alert" hidden></p>
         <div class="story-access-actions">
-          <button class="button primary" type="submit">謎解きを始める</button>
+          <button class="button primary" type="submit">認証する</button>
           <button class="button ghost" type="button" data-action="close-story-access">キャンセル</button>
         </div>
       </form>
@@ -1958,12 +1958,29 @@ function checkFinalAnswer(index, rawAnswer) {
     result.textContent = "作戦コードが合わない。図とヒントをもう一度確認しよう。";
     return;
   }
+  if (index === finalPuzzles.length - 1) {
+    document.querySelector("#final-puzzle-area").innerHTML = `
+      <section class="final-brief is-clear final-weakpoint-clear">
+        <p class="eyebrow dark">WEAKPOINT FOUND</p>
+        <h2>弱点発見！</h2>
+        <p>怪獣の弱点は「背中」だ！</p>
+        <button class="button primary" type="button" data-action="complete-final-weakpoint">最終決戦へ進む</button>
+      </section>
+    `;
+    return;
+  }
   result.textContent = puzzle.clearMessage || (index < finalPuzzles.length - 1 ? "コード認証。次の最終暗号を開きます。" : "弱点を特定。最終決戦のロックを解除します。");
   window.setTimeout(() => {
     state.steps.finalBattle = index + 1;
     saveState();
     renderClear();
   }, 550);
+}
+
+function completeFinalWeakpoint() {
+  state.steps.finalBattle = finalPuzzles.length;
+  saveState();
+  renderClear();
 }
 
 function resetProgress() {
