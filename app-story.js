@@ -1697,7 +1697,7 @@ function showStoryAccessDialog() {
     <article class="story-access-card">
       <p class="eyebrow dark">MISSION ACCESS</p>
       <h2 id="story-access-title">合言葉を入力</h2>
-      <p>謎解きを始めるには、運営から案内された合言葉を入力してください。</p>
+      <p>参加受付・ログイン画面へ進むには、運営から案内された合言葉を入力してください。</p>
       <form id="story-access-form">
         <label for="story-access-password">合言葉</label>
         <input id="story-access-password" name="password" type="password" autocomplete="off" required />
@@ -1717,7 +1717,7 @@ function verifyStoryAccess(form) {
   const password = new FormData(form).get("password")?.toString().trim();
   if (password === "fcan") {
     closeStoryAccessDialog();
-    location.hash = "#story";
+    location.hash = "#profile";
     return;
   }
   const error = form.querySelector("#story-access-error");
