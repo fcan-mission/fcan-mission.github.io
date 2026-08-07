@@ -178,12 +178,8 @@ const missions = [
         },
         lead: "サッカー用語を「ある」と「なし」に分けた法則を読み取り、救助プロトコルを起動せよ。",
         body: "エフ・キャンはどちら？",
-        acceptedAnswers: ["ある", "有る", "あり", "有", "あるのほう"],
-        hints: [
-          "「ある」側のサッカー用語を、カッコ内のカタカナまで声に出してみよう。",
-          "「ある」側にはフォ・フィ・フリ・フがあり、「なし」側のDFはフェです。",
-          "答えは「ある」。"
-        ],
+        acceptedAnswers: ["なし", "無", "無し", "ない", "なしのほう"],
+        hints: ["直線と曲線に注目しよう。"],
         clearMessage: "救助完了！ 森川組が災害発生時に現場事務所周辺の住民を支援する力で、市民を助け出した。",
         puzzleType: "morikawa-rescue"
       }
@@ -205,8 +201,8 @@ const missions = [
   {
     id: "dock",
     companyName: "函館どつく",
-    heroName: "どっくメカニック",
-    allyName: "どっくメカニック",
+    heroName: "どつく",
+    allyName: "どつく",
     character: "real-harbor",
     role: "造船・修理・巨大メカの力",
     category: "造船・機械",
@@ -232,7 +228,7 @@ const missions = [
         title: "第1問 港の技術コア",
         dialogue: {
           speaker: "ナビゲーター",
-          text: "どっくの本拠地にたどり着いた！ どっくには会えたが、みんながどっくの存在を忘れてしまったことでヒーローの力が失われてしまっている。企業ページを確認し、ヒーローの力を取り戻そう。"
+          text: "どつくの本拠地にたどり着いた！ どつくには会えたが、みんながどつくの存在を忘れてしまったことでヒーローの力が失われてしまっている。企業ページを確認し、ヒーローの力を取り戻そう。"
         },
         lead: "船舶の建造、艦艇や商船の各種検査・修理、鉄構機械の製作。函館どつくが選ばれ続けるために進化させ続けている、一番の強みを探そう。",
         body: "船舶の建造、艦艇や商船の各種検査・修理、鉄構機械の製作などの分野において、お客様に選ばれ続けるための進化させ続けている一番の強みとは？ A.『〇〇〇』",
@@ -248,8 +244,8 @@ const missions = [
           text: "技術力の記憶を取り戻した。だが、ヒーローの武器が隠されてしまったようだ。3つの言葉の法則性を見つけ出し、どれが武器なのか選ぶんだ！"
         },
         lead: "ヒーローの武器が隠されてしまった。『王冠、ヘッドフォン、はちまき』に共通する言葉を手がかりに、武器を選べ。",
-        body: "以下の3つの言葉の法則性を見つけ出し、どれが武器なのか3つから選ぶんだ！ 王冠、ヘッドフォン、はちまき／1. 安全靴　2. ヘルメット　3. シールド",
-        acceptedAnswers: ["ヘルメット", "へるめっと"],
+        body: "どれが武器なのか三つの中から数字で答えよ。 王冠、ヘッドフォン、はちまき／1. 安全靴　2. ヘルメット　3. シールド",
+        acceptedAnswers: ["2", "２", "二"],
         hints: ["３つの言葉はどこに身に着けるもの？", "王冠、ヘッドフォン、はちまきは頭につけます。", "答えは『ヘルメット』。"],
         clearMessage: "武器を回収。新造船の記録と合言葉を解読しよう。",
         puzzleType: "dock-weapon"
@@ -257,7 +253,7 @@ const missions = [
       {
         title: "第3問 港の合言葉",
         transition: {
-          speaker: "どっくメカニック",
+          speaker: "どつく",
           text: "力を取り戻したが、必殺技を使うには合言葉が必要で、その合言葉が思い出せない。これまでどんな活躍をしてきたかを調べ、必殺技の合言葉を思い出そう！"
         },
         dialogue: {
@@ -274,7 +270,7 @@ const missions = [
       {
         title: "小ボス戦 港の安全ロック",
         transition: {
-          speaker: "どっくメカニック",
+          speaker: "どつく",
           text: "必殺技の合言葉は「ものづくり」だ！"
         },
         dialogue: {
@@ -290,7 +286,7 @@ const missions = [
           "8月と7月、11月と9月はそれぞれ同じ日数です。",
           "12月も5月も31日。答えは0。"
         ],
-        clearMessage: "安全ロック解除。どっくメカニックが港の設備を安定化し、海からの援護準備が整った！",
+        clearMessage: "安全ロック解除。どつくが港の設備を安定化し、海からの援護準備が整った！",
         puzzleType: "dock-miniboss"
       }
     ],
@@ -300,7 +296,7 @@ const missions = [
     attackText: "港の巨大メカを起動し、海側から援護射撃を放つ。",
     attackClass: "attack-cannon",
     companyIntro: {
-      catch: "どっくメカニックの力の正体",
+      catch: "どつくの力の正体",
       power: "船をつくり、直し、海の仕事を支える造船と修繕の技術。",
       work: "大きな船や機械を扱い、チームで安全な運航を支える仕事。",
       town: "港町函館の産業や物流、人の移動と深くつながっています。",
@@ -429,7 +425,7 @@ const missions = [
         lead: "6つの番号に入る文字をつなぐと、ヒーローが取り戻すべき使命の文章になる。最初のパスワードを導き出そう。",
         body: "第1の謎　以下の謎を解いて、〇〇〇〇の意識を呼び戻す最初のパスワードを導き出すんだ。１２３診断し、４５６還元する。答えが分かったら、ここに打ち込め！",
         acceptedAnswers: ["建物を診断し、社会に還元する。", "建物を診断し、社会に還元する", "建物を診断し社会に還元する。", "建物を診断し社会に還元する", "たてものをしんだんし、しゃかいにかんげんする。", "たてものをしんだんししゃかいにかんげんする"],
-        hints: ["企業ページや記録にある、建物を守るための考え方に注目しよう。", "文章は『建物を診断し、』から始まります。", "答えは『建物を診断し、社会に還元する。』。"],
+        hints: ["ホームページを確認しよう。"],
         clearMessage: "パスワード認証。ヒーローの意識が半分戻ってきた。創造の記録を解析しよう。",
         puzzleType: "toko-message"
       },
@@ -446,7 +442,7 @@ const missions = [
         lead: "【システム警告】コアデータが不足している。ヒーローが守るべき『この場所の真実』を知るため、創造の記録を解析しよう。",
         body: "建物を長持ちさせるために、彼らがまず行う工程は？ 数字を打ち込もう！",
         acceptedAnswers: ["2", "２", "建物の劣化状態を調査・診断し、最適な工法を導き出す", "建物の劣化状態を調査診断し最適な工法を導き出す", "調査・診断", "調査診断"],
-        hints: ["防水や塗装の前に、建物の状態を見極める必要があります。", "正解の選択肢は、建物の『劣化状態』を調べる工程です。", "答えは2。調査・診断して最適な工法を導き出します。"],
+        hints: ["ホームページを確認しよう。"],
         clearMessage: "創造の記録を同期。街の安心を支える基盤が、ヒーローの記憶につながった！",
         puzzleType: "toko-diagnosis"
       },
@@ -463,7 +459,7 @@ const missions = [
         lead: "意識がかなり戻ってきた。だが完全復活には、あと一歩、決定的なピースが足りない。方位と色の暗号から、本当の名前を覚醒させよう。",
         body: "これが最後のロックだ。以下の謎を解き明かし、彼らが背負うべき本当の名前を覚醒させるんだ！！ 答えが分かったら、ここに打ち込め！",
         acceptedAnswers: ["東興", "とうこう", "トウコウ"],
-        hints: ["北斎の最初の2文字は『ほく』。方位の音読みを探そう。", "青い四角は『さい』、赤い四角は『こう』を表します。", "『とう』と『こう』を組み合わせると答えになります。"],
+        hints: ["ホームページを確認しよう。"],
         clearMessage: "マスターコード認証完了。トウコウの記憶と誇りが戻った！ ……だが、防衛システムが起動した。",
         puzzleType: "toko-compass"
       },
@@ -481,7 +477,7 @@ const missions = [
         lead: "目の前に表示されたのは、奇妙な12マスのグリッド。スマホのフリック入力を手がかりに、防衛システムを停止させよう。",
         body: "小ボス",
         acceptedAnswers: ["えふきゃん", "エフキャン", "Fキャン", "fキャン", "F-CAN", "FCAN", "fcan"],
-        hints: ["12マスは、スマホのかなフリック入力の配列を表しています。", "数字の順に読み、矢印はフリック方向、○はそのキーをそのまま選ぶ合図です。", "答えは『えふきゃん』。"],
+        hints: ["スマホのキーボードに注目しよう。"],
         clearMessage: "防衛システム停止。エナジーリンクが完全覚醒し、炎と防水層を展開した！",
         puzzleType: "toko-flick-boss"
       }
@@ -509,7 +505,7 @@ const puzzleExplanations = {
   "shodai-miniboss": "曜日を漢字で見ると、日・月・火・水・木は4画、土は3画です。同じルールで金は8画なので、答えは『金の8角形』です。",
   "morikawa-identity": "白い現場ヘルメットと青緑のエンブレムは、函館で建設に携わる森川組の手がかりです。漢字3文字の企業名『森川組』を導きます。",
   "morikawa-seal": "赤い四角は『RECRUIT MOVIE』のM、黄色い三角は出発・発進・発見・発表に共通する『発』を示します。図形の文字をつなげると、森川組の言葉『Mの創発』になります。",
-  "morikawa-rescue": "『ある』側のサッカー用語には、フォ・フィ・フリ・フのようにフの音があります。エフ・キャンにも『フ』が入るため、答えは『ある』です。",
+  "morikawa-rescue": "『ある』はアルファベットの文字に曲線が入っていて、『なし』は直線だけで構成されています。エフ・キャンのFは直線だけなので、答えは『なし』です。",
   "dock-core": "函館どつくは、船の建造や修理、鉄構機械の製作を支える会社です。選ばれ続けるために磨いている強みとして、企業情報から『技術力』を読み取れます。",
   "dock-weapon": "王冠、ヘッドフォン、はちまきは、どれも頭につけるものです。選択肢の中で同じく頭を守る装備は『ヘルメット』です。",
   "dock-password": "暗号メモの指定どおり、技術力・貨物船・はこだてどつくの文字を順に抜き出します。並べると、函館どつくのものづくりへの思いを表す『ものづくり』になります。",
@@ -529,7 +525,7 @@ const pdfHints = {
   "shodai-miniboss": ["曜日を漢字にして画数を数えてみよう！"],
   "morikawa-identity": ["右のヘルメットで身を守り、左のエンブレムのもと活動していた函館のヒーローだ。"],
   "morikawa-seal": ["一つ目のヒントで得た企業の公式サイトを見ながら下の言葉を完成させよ。"],
-  "morikawa-rescue": ["ある：FW（フォワード）、MF（ミッドフィルダー）、FK（フリーキック）、HT（ハーフタイム）／なし：GK（ゴールキーパー）、DF（ディフェンダー）、PK（ペナルティキック）、VAR"],
+  "morikawa-rescue": ["直線と曲線に注目しよう。"],
   "dock-core": ["ホームページを見てみよう。"],
   "dock-weapon": ["３つの言葉はどこに身に着けるもの？"],
   "dock-password": ["函館どつくのキャッチコピーの「ここにしかない「〇の〇〇〇」」"],
@@ -537,10 +533,10 @@ const pdfHints = {
   "century-cruising": ["ホームページを調べよう。"],
   "century-scenery": ["このヒーローは本拠地の客室や露天風呂から見える景色がとてもいいんだ！ 函館の特徴でもある夜景や海を最大限に生かしたおもてなしをしているんだ！"],
   "century-meal": ["５０音順で文字を前後に動かそう。"],
-  "toko-message": ["画像をカメラで読み込むんだ！"],
-  "toko-diagnosis": ["建物を長持ちさせるために、彼らがまず行う工程は？"],
-  "toko-compass": ["これが最後のロックだ。以下の謎を解き明かし、彼らが背負うべき本当の名前を覚醒させるんだ！"],
-  "toko-flick-boss": ["12マスのグリッドを解析せよ！"],
+  "toko-message": ["ホームページを確認しよう。"],
+  "toko-diagnosis": ["ホームページを確認しよう。"],
+  "toko-compass": ["ホームページを確認しよう。"],
+  "toko-flick-boss": ["スマホのキーボードに注目しよう。"],
   "final-maze": ["迷路をたどると何か指示をだす文が見つかるよ。"],
   "final-zodiac": ["左から早い順で動物の名前が入るよ。"],
   "final-piano": ["うるさくしている人は音楽記号のf（フォルテ）が入っているね。じゃあ静かにしている人は何をあらわしているかな？"],
@@ -665,7 +661,7 @@ const characterAssets = {
     src: "assets/characters/dock-mechanic-female-v3.png",
     width: 887,
     height: 1774,
-    alt: "どっくメカニック"
+    alt: "どつく"
   },
   "real-century": {
     src: "assets/characters/century-medic-v2.png",
@@ -955,7 +951,6 @@ function renderMissions() {
         ${unlocked ? `<a class="mission-character-link" href="#company/${mission.id}" aria-label="${escapeAttribute(mission.heroName)}のプロフィールを見る">${missionCharacterHtml(mission, true, "mission-character", mission.heroName)}</a>` : missionCharacterHtml(mission, false, "mission-character", "")}
         <div class="tag-row">
           <span class="tag status ${unlocked ? "clear" : inProgress ? "progress" : ""}">${statusLabel}</span>
-          <span class="tag">${stars(mission.difficulty)}</span>
           <span class="tag">${escapeHtml(mission.category)}</span>
         </div>
         <h2>${unlocked ? escapeHtml(mission.heroName) : "???"}</h2>
@@ -986,7 +981,6 @@ function renderMission(id) {
       <p>${escapeHtml(mission.storyIntro)}</p>
       <div class="tag-row">
         <span class="tag">${escapeHtml(mission.category)}</span>
-        <span class="tag">${stars(mission.difficulty)}</span>
       </div>
     </aside>
     <article class="quiz-box mission-${escapeAttribute(mission.id)} ${unlocked ? "is-unlocked" : ""}" id="quiz-box" style="--accent:${mission.accent}">
@@ -1084,7 +1078,6 @@ function renderCompany(id) {
       <p>${escapeHtml(mission.companyName)}。${escapeHtml(mission.heroDescription)}</p>
       <div class="tag-row">
         <span class="tag">${escapeHtml(mission.category)}</span>
-        <span class="tag">${stars(mission.difficulty)}</span>
         <span class="tag follow-status ${followed ? "is-followed" : ""}">${followed ? "フォロー中" : "未フォロー"}</span>
       </div>
     </aside>
@@ -2340,7 +2333,7 @@ function puzzleHtml(step) {
     return `
       <div class="puzzle-panel toko-circuit-file toko-compass-file">
         <figure class="toko-compass-reference">
-          <img src="assets/puzzles/toko-compass-clue.png" width="530" height="681" alt="東興アイテック第2問の暗号図" />
+          <img src="assets/puzzles/toko-compass-clue.png" width="489" height="647" alt="東興アイテック第2問の暗号図" />
         </figure>
       </div>
     `;
@@ -2433,8 +2426,8 @@ function puzzleHtml(step) {
         <div class="rescue-signal"><span>RESCUE SIGNAL / HAKODATE</span><strong>市民救助プロトコル</strong></div>
         <p>カッコ内のサッカー用語も手がかりに、「ある」と「なし」を分ける法則を考えよう。</p>
         <div class="football-sort" aria-label="サッカー用語をあるとなしに分類する問題">
-          <section class="has-f"><h3>ある</h3><ul>${termList(presentTerms)}</ul></section>
-          <section class="has-not-f"><h3>なし</h3><ul>${termList(absentTerms)}</ul></section>
+          <section class="has-f"><h3>なし</h3><ul>${termList(presentTerms)}</ul></section>
+          <section class="has-not-f"><h3>ある</h3><ul>${termList(absentTerms)}</ul></section>
         </div>
         <div class="fcan-choice"><span>エフ・キャン</span><b>→</b><strong>ある / なし</strong></div>
       </div>
@@ -2514,10 +2507,6 @@ function sanitizeState() {
 function missionWebsiteLinkHtml(mission) {
   if (!mission.website || mission.website === "https://example.com") return "";
   return `<a class="button ghost" href="${escapeAttribute(mission.website)}" target="_blank" rel="noreferrer">企業HPを見る</a>`;
-}
-
-function stars(difficulty) {
-  return `${"★".repeat(difficulty)}${"☆".repeat(3 - difficulty)}`;
 }
 
 function characterSvg(id, className = "character-icon", label = "") {
