@@ -80,7 +80,7 @@ const missions = [
           text: "あぶない！ 建物が倒れてくる！ 謎を解いてショウダイのパワーで建物の内側の鉄筋を建て直してくれ！"
         },
         lead: "金曜日に対応する形を復元せよ。",
-        body: "？に入るのはどんな形だろう？",
+        body: "？に入る数字を入力しよう",
         acceptedAnswers: ["八", "８"],
         hints: [
           "曜日を漢字にして画数を数えてみよう！",
@@ -204,7 +204,7 @@ const missions = [
   },
   {
     id: "dock",
-    companyName: "函館どっく",
+    companyName: "函館どつく",
     heroName: "どっくメカニック",
     allyName: "どっくメカニック",
     character: "real-harbor",
@@ -234,7 +234,7 @@ const missions = [
           speaker: "ナビゲーター",
           text: "どっくの本拠地にたどり着いた！ どっくには会えたが、みんながどっくの存在を忘れてしまったことでヒーローの力が失われてしまっている。企業ページを確認し、ヒーローの力を取り戻そう。"
         },
-        lead: "船舶の建造、艦艇や商船の各種検査・修理、鉄構機械の製作。函館どっくが選ばれ続けるために進化させ続けている、一番の強みを探そう。",
+        lead: "船舶の建造、艦艇や商船の各種検査・修理、鉄構機械の製作。函館どつくが選ばれ続けるために進化させ続けている、一番の強みを探そう。",
         body: "船舶の建造、艦艇や商船の各種検査・修理、鉄構機械の製作などの分野において、お客様に選ばれ続けるための進化させ続けている一番の強みとは？ A.『〇〇〇』",
         acceptedAnswers: ["技術力", "ぎじゅつりょく", "ギジュツリョク"],
         hints: ["ホームページを見てみよう。", "漢字3文字では『技術力』。", "ひらがななら『ぎじゅつりょく』。"],
@@ -264,7 +264,7 @@ const missions = [
           speaker: "ナビゲーター",
           text: "ヒーローを仲間にするには合言葉が必要だ！ 合言葉のカギとなる暗号が落とされているぞ。それをもとに解き明かせ！"
         },
-        lead: "新造船で建造する『内航フェリーと貨物船』、会社名『はこだてどっく』の記録を使い、必殺技の合言葉を復元せよ。",
+        lead: "新造船で建造する『内航フェリーと貨物船』、会社名『はこだてどつく』の記録を使い、必殺技の合言葉を復元せよ。",
         body: "B2＋の＋C6゛＋C7＋A5＝？",
         acceptedAnswers: ["ものづくり", "モノヅクリ", "物づくり", "物作り"],
         hints: ["函館どつくのキャッチコピーの「ここにしかない「〇の〇〇〇」」", "C2＋の＋A4゛＋D7＋A5 を順番に読もう。", "答えは『ものづくり』。"],
@@ -340,9 +340,9 @@ const missions = [
           text: "次に思い出すヒーローは、函館の海を生かしたリラックスできる空間を提供している。疲労を癒やし、怪獣に立ち向かう力を取り戻そう。センチュリーマリーナの記録から、合言葉を探せ！"
         },
         lead: "日常を離れ、ひとときのプライベートな時間が叶う場所。海や船をモチーフにしたホテルの魅力を調べよう。",
-        body: "日常を離れ、ひとときのプライベート・〇〇〇〇〇〇が叶う場所。",
+        body: "日常を離れ、ひとときのプライベートな時間が叶う場所。",
         acceptedAnswers: ["クルージング", "くるーじんぐ"],
-        hints: ["ホテルの公式サイトにある紹介文を見よう。", "海や船で楽しむ非日常の体験です。", "答えは『クルージング』。"],
+        hints: ["ホームページを調べよう。", "海や船で楽しむ非日常の体験です。", "答えは『クルージング』。"],
         clearMessage: "謎解きの鍵が開いたぞ！ この調子でヒーローの力を呼び覚まそう。次は函館らしい景色の鍵だ。",
         puzzleType: "century-cruising"
       },
@@ -427,7 +427,7 @@ const missions = [
           text: "ここは、火を使い街を守る鉄壁の防御ヒーローのエリアだ。ヒーローはすべての記憶を失い、完全に沈黙している。2つの暗号を解き、まずは第1のセキュリティをハッキングせよ！"
         },
         lead: "6つの番号に入る文字をつなぐと、ヒーローが取り戻すべき使命の文章になる。最初のパスワードを導き出そう。",
-        body: "第1の謎　以下の謎を解いて、〇〇〇〇の意識を呼び戻す最初のパスワードを導き出すんだ。答えが分かったら、ここに打ち込め！",
+        body: "第1の謎　以下の謎を解いて、〇〇〇〇の意識を呼び戻す最初のパスワードを導き出すんだ。１２３診断し、４５６還元する。答えが分かったら、ここに打ち込め！",
         acceptedAnswers: ["建物を診断し、社会に還元する。", "建物を診断し、社会に還元する", "建物を診断し社会に還元する。", "建物を診断し社会に還元する", "たてものをしんだんし、しゃかいにかんげんする。", "たてものをしんだんししゃかいにかんげんする"],
         hints: ["企業ページや記録にある、建物を守るための考え方に注目しよう。", "文章は『建物を診断し、』から始まります。", "答えは『建物を診断し、社会に還元する。』。"],
         clearMessage: "パスワード認証。ヒーローの意識が半分戻ってきた。創造の記録を解析しよう。",
@@ -444,7 +444,7 @@ const missions = [
           text: "建物を診断し、社会に還元する。……それが私との絆だ。だが、それだけでは思い出せない。私は一体どんな想いで、何を創っていたのだ……？"
         },
         lead: "【システム警告】コアデータが不足している。ヒーローが守るべき『この場所の真実』を知るため、創造の記録を解析しよう。",
-        body: "建物を長持ちさせるために、彼らがまず行う工程は？",
+        body: "建物を長持ちさせるために、彼らがまず行う工程は？ 数字を打ち込もう！",
         acceptedAnswers: ["2", "２", "建物の劣化状態を調査・診断し、最適な工法を導き出す", "建物の劣化状態を調査診断し最適な工法を導き出す", "調査・診断", "調査診断"],
         hints: ["防水や塗装の前に、建物の状態を見極める必要があります。", "正解の選択肢は、建物の『劣化状態』を調べる工程です。", "答えは2。調査・診断して最適な工法を導き出します。"],
         clearMessage: "創造の記録を同期。街の安心を支える基盤が、ヒーローの記憶につながった！",
@@ -510,9 +510,9 @@ const puzzleExplanations = {
   "morikawa-identity": "白い現場ヘルメットと青緑のエンブレムは、函館で建設に携わる森川組の手がかりです。漢字3文字の企業名『森川組』を導きます。",
   "morikawa-seal": "赤い四角は『RECRUIT MOVIE』のM、黄色い三角は出発・発進・発見・発表に共通する『発』を示します。図形の文字をつなげると、森川組の言葉『Mの創発』になります。",
   "morikawa-rescue": "『ある』側のサッカー用語には、フォ・フィ・フリ・フのようにフの音があります。エフ・キャンにも『フ』が入るため、答えは『ある』です。",
-  "dock-core": "函館どっくは、船の建造や修理、鉄構機械の製作を支える会社です。選ばれ続けるために磨いている強みとして、企業情報から『技術力』を読み取れます。",
+  "dock-core": "函館どつくは、船の建造や修理、鉄構機械の製作を支える会社です。選ばれ続けるために磨いている強みとして、企業情報から『技術力』を読み取れます。",
   "dock-weapon": "王冠、ヘッドフォン、はちまきは、どれも頭につけるものです。選択肢の中で同じく頭を守る装備は『ヘルメット』です。",
-  "dock-password": "暗号メモの指定どおり、技術力・貨物船・はこだてどっくの文字を順に抜き出します。並べると、函館どっくのものづくりへの思いを表す『ものづくり』になります。",
+  "dock-password": "暗号メモの指定どおり、技術力・貨物船・はこだてどつくの文字を順に抜き出します。並べると、函館どつくのものづくりへの思いを表す『ものづくり』になります。",
   "dock-miniboss": "月の日数に注目します。12月も5月も31日なので、日数の差は0です。",
   "century-cruising": "ホテル紹介にある『プライベート・クルージングが叶う場所』という表現が手がかりです。海や船をテーマにした非日常の体験を表す答えは『クルージング』です。",
   "century-scenery": "色ごとの文字列から、指定された数字の位置の文字を抜き出します。赤・青・黒の記録を順に読むと『け・し・き』となり、答えは『景色』です。",
@@ -534,8 +534,9 @@ const pdfHints = {
   "dock-weapon": ["３つの言葉はどこに身に着けるもの？"],
   "dock-password": ["函館どつくのキャッチコピーの「ここにしかない「〇の〇〇〇」」"],
   "dock-miniboss": ["左の数字は月を表している"],
-  "century-cruising": ["日常を離れ、ひとときのプライベート・〇〇〇〇〇〇が叶う場所。"],
+  "century-cruising": ["ホームページを調べよう。"],
   "century-scenery": ["このヒーローは本拠地の客室や露天風呂から見える景色がとてもいいんだ！ 函館の特徴でもある夜景や海を最大限に生かしたおもてなしをしているんだ！"],
+  "century-meal": ["５０音順で文字を前後に動かそう。"],
   "toko-message": ["画像をカメラで読み込むんだ！"],
   "toko-diagnosis": ["建物を長持ちさせるために、彼らがまず行う工程は？"],
   "toko-compass": ["これが最後のロックだ。以下の謎を解き明かし、彼らが背負うべき本当の名前を覚醒させるんだ！"],
@@ -1111,7 +1112,7 @@ function companyProfileHtml(mission) {
       <ul>${mission.companyIntro.points.map((point) => `<li>${escapeHtml(point)}</li>`).join("")}</ul>
     </div>
     <p class="unlock-line">${escapeHtml(mission.unlockMessage)}</p>
-    <div class="follow-panel">
+        <div class="follow-panel">
       <div>
         <p class="eyebrow dark">FOLLOW COMPANY</p>
         <h3>${escapeHtml(mission.companyName)}をフォローする</h3>
@@ -1121,7 +1122,6 @@ function companyProfileHtml(mission) {
         <button class="button ${followed ? "interested" : "primary"}" type="button" data-action="interest" data-id="${mission.id}" aria-label="${escapeAttribute(mission.companyName)}をフォロー">
           ${followed ? "フォロー中" : "会社をフォローする"}
         </button>
-        ${recruitmentLinkHtml(mission)}
       </div>
     </div>
     <div class="interest-row">
@@ -1858,7 +1858,6 @@ function showHeroUnlock(mission) {
         <p class="unlock-follow-copy">${escapeHtml(mission.companyName)}をフォローすると、あとで見返したい会社として保存できます。</p>
         <div class="unlock-next-actions">
           <button class="button primary" type="button" data-action="follow-company" data-id="${mission.id}" aria-label="${escapeAttribute(mission.companyName)}をフォロー">会社をフォローする</button>
-          ${recruitmentLinkHtml(mission)}
         </div>
         <a class="button ghost" href="#missions" data-action="close-unlock">次のヒーローを探す</a>
       </div>
@@ -2285,7 +2284,7 @@ function puzzleHtml(step) {
     return `
       <div class="puzzle-panel dock-file">
         <div class="puzzle-file-header"><span>PORT ARCHIVE</span><strong>FINAL KEY</strong></div>
-        <div class="dock-records" aria-label="暗号に使う記録"><span>A　ぎじゅつりょく</span><span>B　かもつせん</span><span>C　はこだてどっく</span></div>
+        <div class="dock-records" aria-label="暗号に使う記録"><span>A　ぎじゅつりょく</span><span>B　かもつせん</span><span>C　はこだてどつく</span></div>
         <p class="cipher-line">B2 ＋ の ＋ C6゛ ＋ C7 ＋ A5　＝　？</p>
         <div class="answer-slots" aria-label="ひらがな5文字の答え"><span>＿</span><span>＿</span><span>＿</span><span>＿</span><span>＿</span></div>
       </div>
@@ -2355,38 +2354,9 @@ function puzzleHtml(step) {
   if (step.puzzleType === "toko-compass") {
     return `
       <div class="puzzle-panel toko-circuit-file toko-compass-file">
-        <div class="puzzle-file-header"><span>FIRE LINK ARCHIVE</span><strong>MEMORY 03</strong></div>
-        <section class="toko-compass-figure" aria-label="方位の音と色付きの四角を組み合わせる暗号">
-          <p class="toko-compass-title">方位の音 + 色の音 をつなごう</p>
-          <div class="toko-compass-legend" aria-hidden="true"><span class="is-direction">黒：方位の音</span><span class="is-blue">青：さい</span><span class="is-red">赤：こう</span></div>
-          <p class="toko-compass-step">① 3つの例を声に出して、方位と色が表す音を確認しよう。</p>
-          <div class="toko-compass-layout">
-            <figure class="toko-compass-reference">
-              <img src="assets/puzzles/toko-compass-clue.png" width="530" height="681" alt="北斎、再生、軟膏の例、方位磁針、色付きの四角と答え欄が描かれた方位と色の暗号図" />
-              <figcaption>PDFの暗号図</figcaption>
-            </figure>
-            <div class="toko-compass-examples">
-              <div class="toko-compass-example">
-                <div class="toko-token-row"><span class="toko-sound-token is-direction"><b>北</b><small>ほく</small></span><b>＋</b><span class="toko-sound-token is-blue">さい</span></div>
-                <p><strong>北斎</strong><span>ほくさい</span></p>
-              </div>
-              <div class="toko-compass-example">
-                <div class="toko-token-row"><span class="toko-sound-token is-blue">さい</span><b>＋</b><span class="toko-sound-token is-direction"><b>西</b><small>せい</small></span></div>
-                <p><strong>再生</strong><span>さいせい</span></p>
-              </div>
-              <div class="toko-compass-example">
-                <div class="toko-token-row"><span class="toko-sound-token is-direction"><b>南</b><small>なん</small></span><b>＋</b><span class="toko-sound-token is-red">こう</span></div>
-                <p><strong>軟膏</strong><span>なんこう</span></p>
-              </div>
-            </div>
-          </div>
-          <div class="toko-compass-target">
-            <span class="toko-compass-target-step">② 東を使う</span>
-            <span class="toko-sound-token is-direction"><b>東</b><small>？</small></span><b>＋</b><span class="toko-sound-token is-red">こう</span><b>＝</b><strong>？</strong>
-            <p class="toko-compass-target-help">東の音と赤い四角の音を組み合わせて、ヒーローの名前を答えよう。</p>
-          </div>
-        </section>
-        <p>黒い四角は方位の音読み、青・赤の四角はそれぞれ決まった音を表します。</p>
+        <figure class="toko-compass-reference">
+          <img src="assets/puzzles/toko-compass-clue.png" width="530" height="681" alt="東興アイテック第2問の暗号図" />
+        </figure>
       </div>
     `;
   }
@@ -2418,9 +2388,6 @@ function puzzleHtml(step) {
                 : `<span class="toko-flick-cell" aria-hidden="true"></span>`
             )
             .join("")}
-        </div>
-        <div class="toko-flick-legend" aria-label="端末差をなくすためのフリック入力の読み取り規則">
-          <span><b>①</b> あを右へ</span><span><b>②</b> はを上へ</span><span><b>③</b> かを左へ</span><span><b>④→⑤</b> やを小文字へ</span><span><b>⑥</b> んを選ぶ</span>
         </div>
         <div class="toko-flick-question"><span>① → ⑥ の順に入力</span><b>→</b><strong>？</strong></div>
       </div>
@@ -2562,11 +2529,6 @@ function sanitizeState() {
 function missionWebsiteLinkHtml(mission) {
   if (!mission.website || mission.website === "https://example.com") return "";
   return `<a class="button ghost" href="${escapeAttribute(mission.website)}" target="_blank" rel="noreferrer">企業HPを見る</a>`;
-}
-
-function recruitmentLinkHtml(mission) {
-  if (!mission.recruitUrl) return "";
-  return `<a class="button ghost" href="${escapeAttribute(mission.recruitUrl)}" target="_blank" rel="noreferrer">採用情報を見る</a>`;
 }
 
 function stars(difficulty) {
