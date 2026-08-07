@@ -178,7 +178,7 @@ const missions = [
         },
         lead: "サッカー用語を「ある」と「なし」に分けた法則を読み取り、救助プロトコルを起動せよ。",
         body: "エフ・キャンはどちら？",
-        acceptedAnswers: ["なし", "無", "無し", "ない", "なしのほう"],
+        acceptedAnswers: ["ある", "有る", "あり", "有", "あるのほう"],
         hints: ["直線と曲線に注目しよう。"],
         clearMessage: "救助完了！ 森川組が災害発生時に現場事務所周辺の住民を支援する力で、市民を助け出した。",
         puzzleType: "morikawa-rescue"
@@ -459,7 +459,7 @@ const missions = [
         lead: "意識がかなり戻ってきた。だが完全復活には、あと一歩、決定的なピースが足りない。方位と色の暗号から、本当の名前を覚醒させよう。",
         body: "これが最後のロックだ。以下の謎を解き明かし、彼らが背負うべき本当の名前を覚醒させるんだ！！ 答えが分かったら、ここに打ち込め！",
         acceptedAnswers: ["東興", "とうこう", "トウコウ"],
-        hints: ["ホームページを確認しよう。"],
+        hints: ["床の方角とイラストの表すものと四角の色の関係を考えてみると？"],
         clearMessage: "マスターコード認証完了。トウコウの記憶と誇りが戻った！ ……だが、防衛システムが起動した。",
         puzzleType: "toko-compass"
       },
@@ -505,7 +505,7 @@ const puzzleExplanations = {
   "shodai-miniboss": "曜日を漢字で見ると、日・月・火・水・木は4画、土は3画です。同じルールで金は8画なので、答えは『金の8角形』です。",
   "morikawa-identity": "白い現場ヘルメットと青緑のエンブレムは、函館で建設に携わる森川組の手がかりです。漢字3文字の企業名『森川組』を導きます。",
   "morikawa-seal": "赤い四角は『RECRUIT MOVIE』のM、黄色い三角は出発・発進・発見・発表に共通する『発』を示します。図形の文字をつなげると、森川組の言葉『Mの創発』になります。",
-  "morikawa-rescue": "『ある』はアルファベットの文字に曲線が入っていて、『なし』は直線だけで構成されています。エフ・キャンのFは直線だけなので、答えは『なし』です。",
+  "morikawa-rescue": "『ある』はアルファベットの文字に曲線が入っていて、『なし』は直線だけで構成されています。F-CANには曲線を含むCがあるため、答えは『ある』です。",
   "dock-core": "函館どつくは、船の建造や修理、鉄構機械の製作を支える会社です。選ばれ続けるために磨いている強みとして、企業情報から『技術力』を読み取れます。",
   "dock-weapon": "王冠、ヘッドフォン、はちまきは、どれも頭につけるものです。選択肢の中で同じく頭を守る装備は『ヘルメット』です。",
   "dock-password": "暗号メモの指定どおり、技術力・貨物船・はこだてどつくの文字を順に抜き出します。並べると、函館どつくのものづくりへの思いを表す『ものづくり』になります。",
@@ -535,7 +535,7 @@ const pdfHints = {
   "century-meal": [],
   "toko-message": ["ホームページを確認しよう。"],
   "toko-diagnosis": ["ホームページを確認しよう。"],
-  "toko-compass": ["ホームページを確認しよう。"],
+  "toko-compass": ["床の方角とイラストの表すものと四角の色の関係を考えてみると？"],
   "toko-flick-boss": ["スマホのキーボードに注目しよう。"],
   "final-maze": ["迷路をたどると何か指示をだす文が見つかるよ。"],
   "final-zodiac": ["左から早い順で動物の名前が入るよ。"],
@@ -1636,7 +1636,6 @@ function handleDocumentClick(event) {
   if (action === "start-battle" || action === "replay-battle") return startFinalBattle();
   if (action === "skip-battle") return finishBattle();
   if (action === "start-kaiju-battle") return startKaijuBattle();
-  if (action === "complete-final-weakpoint") return completeFinalWeakpoint();
   if (action === "continue-kaiju-battle") return continueKaijuBattle();
   if (action === "replay-kaiju-battle") {
     state.steps.kaijuBattle = 0;
@@ -1958,29 +1957,20 @@ function checkFinalAnswer(index, rawAnswer) {
     result.textContent = "作戦コードが合わない。図とヒントをもう一度確認しよう。";
     return;
   }
-  if (index === finalPuzzles.length - 1) {
-    document.querySelector("#final-puzzle-area").innerHTML = `
-      <section class="final-brief is-clear final-weakpoint-clear">
-        <p class="eyebrow dark">WEAKPOINT FOUND</p>
-        <h2>弱点発見！</h2>
-        <p>怪獣の弱点は「背中」だ！</p>
-        <button class="button primary" type="button" data-action="complete-final-weakpoint">最終決戦へ進む</button>
-      </section>
-    `;
-    return;
-  }
-  result.textContent = puzzle.clearMessage || (index < finalPuzzles.length - 1 ? "コード認証。次の最終暗号を開きます。" : "弱点を特定。最終決戦のロックを解除します。");
-  window.setTimeout(() => {
-    state.steps.finalBattle = index + 1;
-    saveState();
-    renderClear();
-  }, 550);
-}
-
-function completeFinalWeakpoint() {
-  state.steps.finalBattle = finalPuzzles.length;
-  saveState();
-  renderClear();
+  const isLastPuzzle = index === finalPuzzles.length - 1;
+  showClearResult({
+    title: puzzle.title,
+    message: isLastPuzzle ? "弱点発見！ 怪獣の弱点は「背中」だ！" : (puzzle.clearMessage || "作戦コードを認証しました。"),
+    explanation: isLastPuzzle
+      ? "第3問と第4問を重ねて浮かび上がる文字を読み、怪獣の弱点「背中」を特定しました。"
+      : "作戦コードを解析しました。次の問題へ進みましょう。",
+    continueLabel: isLastPuzzle ? "最終決戦へ進む" : "次の問題へ",
+    onContinue: () => {
+      state.steps.finalBattle = index + 1;
+      saveState();
+      renderClear();
+    }
+  });
 }
 
 function resetProgress() {
