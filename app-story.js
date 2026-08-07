@@ -1925,7 +1925,6 @@ function closeHeroUnlock() {
 
 async function saveParticipant(formData) {
   if (!currentUser || !db) throw new Error("ログインが必要です。");
-  const previousCompletion = state.participant?.kaijuBattleCompletedAt || null;
   state.participant = {
     id: currentUser.uid,
     name: formData.get("name")?.toString().trim() || "ゲスト",
@@ -1933,20 +1932,14 @@ async function saveParticipant(formData) {
     interests: formData.getAll("interests").map(String),
     createdAt: state.participant?.createdAt || new Date().toISOString(),
     updatedAt: new Date().toISOString(),
-    privacyConsent: formData.get("privacy-consent") === "on",
-    ...(previousCompletion ? { kaijuBattleCompletedAt: previousCompletion } : {})
+    privacyConsent: formData.get("privacy-consent") === "on"
   };
-  const completedKaijuBattle = getKaijuBattleIndex() >= kaijuBattlePuzzles.length;
-  if (completedKaijuBattle && !state.participant.kaijuBattleCompletedAt) {
-    state.participant.kaijuBattleCompletedAt = new Date().toISOString();
-  }
   await setDoc(doc(db, "participants", currentUser.uid), {
     ...state.participant,
     email: currentUser.email || "",
     progress: progressSnapshot(),
     createdAt: state.participant.createdAt,
-    updatedAt: serverTimestamp(),
-    ...(completedKaijuBattle && !previousCompletion ? { kaijuBattleCompletedAt: serverTimestamp() } : {})
+    updatedAt: serverTimestamp()
   }, { merge: true });
   localStorage.setItem(STORAGE_KEYS.participant, JSON.stringify(state.participant));
 }
@@ -1955,11 +1948,10 @@ function recordKaijuCompletion() {
   if (!currentUser || !db || !state.participant?.id || state.participant.kaijuBattleCompletedAt) return;
   state.participant.kaijuBattleCompletedAt = new Date().toISOString();
   localStorage.setItem(STORAGE_KEYS.participant, JSON.stringify(state.participant));
-  setDoc(doc(db, "participants", currentUser.uid), {
+  setDoc(doc(db, "clearers", currentUser.uid), {
     name: state.participant.name || "",
     email: currentUser.email || "",
-    kaijuBattleCompletedAt: serverTimestamp(),
-    updatedAt: serverTimestamp()
+    completedAt: serverTimestamp()
   }, { merge: true }).catch((error) => {
     console.error("討伐記録を保存できませんでした。", error);
     delete state.participant.kaijuBattleCompletedAt;
