@@ -1050,6 +1050,7 @@ function renderCompanies() {
   list.replaceChildren(
     ...missions.map((mission) => {
       const followed = state.interests.has(mission.id);
+      const unlocked = state.unlocked.has(mission.id);
       const card = el("article", "company-card reveal");
       card.style.setProperty("--accent", mission.accent);
       card.innerHTML = `

@@ -536,6 +536,21 @@ p {
     #e7f3e4;
 }
 
+/* 最終決戦の見出しは淡い背景の上でも読み取れるよう、専用の濃色にする。 */
+.clear-hero .eyebrow {
+  color: #155e70;
+  text-shadow: none;
+}
+
+.page-hero.clear-hero h1 {
+  color: #101513;
+  text-shadow: 2px 2px 0 rgba(255, 253, 242, 0.92);
+}
+
+.clear-hero #clear-copy {
+  color: #31483a;
+}
+
 .page-hero-inner {
   padding: 48px 0 34px;
 }
