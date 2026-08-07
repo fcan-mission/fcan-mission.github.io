@@ -1405,6 +1405,7 @@ function endingStoryHtml() {
       <p class="eyebrow dark">HERO MATCH COMPLETE</p>
       <h2>街を救ったのは、見つけ出す力だった。</h2>
       <p>街を救ったのは、特別な誰かではなかった。普段は見えにくい場所で、函館の暮らしを支えている企業の力。そして、それを見つけ出した君たちの知恵だった。</p>
+      <p><strong>受け付けブースに報告しに行こう！</strong></p>
     </article>
   `;
 }
