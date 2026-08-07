@@ -1224,6 +1224,19 @@ img.mission-character {
   line-break: strict;
 }
 
+.mission-character-link,
+.hero-slot-link {
+  color: inherit;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.mission-character-link:focus-visible,
+.hero-slot-link:focus-visible {
+  outline: 3px solid var(--whistle);
+  outline-offset: 4px;
+}
+
 .quiz-box p,
 .company-profile p {
   overflow-wrap: break-word;
@@ -2035,11 +2048,21 @@ img.mission-character {
   grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
-.kanji-cross span {
+.kanji-cross > span {
   padding: 10px;
   background: #fffefa;
   border: 2px solid rgba(23, 48, 35, 0.74);
   font-weight: 950;
+}
+
+.kanji-cross .shape.triangle.yellow {
+  width: 0;
+  height: 0;
+  margin: 0 5px 0 2px;
+  border-right-width: 12px;
+  border-bottom-width: 21px;
+  border-left-width: 12px;
+  vertical-align: -3px;
 }
 
 .morikawa-seal-images {
@@ -5538,6 +5561,15 @@ img.mission-character {
 
 .battle-hint summary { cursor: pointer; }
 .battle-hint p { margin-top: 8px; }
+.kaiju-keyboard-hint { display: block; width: min(100%, 560px); height: auto; margin: 12px auto 2px; border: 2px solid #173023; border-radius: 10px; }
+
+.mission-website-entry {
+  margin: 18px 0 12px;
+}
+
+.mission-website-entry .button {
+  width: 100%;
+}
 
 .kaiju-puzzle-visual {
   display: grid;

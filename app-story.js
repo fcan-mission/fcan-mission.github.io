@@ -605,7 +605,7 @@ const kaijuBattlePuzzles = [
     title: "第1問 キーボード暗号",
     body: "？に入る英単語は？　nazotoki → msxpyplo　／　？ → dpvvrt",
     acceptedAnswers: ["soccer", "サッカー", "さっかー"],
-    hint: "キーボードの画像を見せる。",
+    hint: "キーボードの配列を見て、左右に並ぶ文字を確認しよう。",
     explanation: "キーボードのアルファベットがすべて右にずれている暗号です。nazotoki を左へ1つずつ戻すと soccer になるため、答えは「soccer」です。",
     damage: 20,
     puzzleType: "kaiju-keyboard"
@@ -952,7 +952,7 @@ function renderMissions() {
       const card = el("article", `mission-card reveal ${unlocked ? "is-clear" : "is-locked-card"}`);
       card.style.setProperty("--accent", mission.accent);
       card.innerHTML = `
-        ${missionCharacterHtml(mission, unlocked, "mission-character", unlocked ? mission.heroName : "")}
+        ${unlocked ? `<a class="mission-character-link" href="#company/${mission.id}" aria-label="${escapeAttribute(mission.heroName)}のプロフィールを見る">${missionCharacterHtml(mission, true, "mission-character", mission.heroName)}</a>` : missionCharacterHtml(mission, false, "mission-character", "")}
         <div class="tag-row">
           <span class="tag status ${unlocked ? "clear" : inProgress ? "progress" : ""}">${statusLabel}</span>
           <span class="tag">${stars(mission.difficulty)}</span>
@@ -998,13 +998,13 @@ function renderMission(id) {
       ${missionDialogueHtml(step.dialogue)}
       ${puzzleHtml(step)}
       <p><strong>問題:</strong> ${escapeHtml(step.body)}</p>
+      ${stepIndex === 0 ? `<div class="mission-website-entry">${missionWebsiteLinkHtml(mission)}</div>` : ""}
       <form id="answer-form" data-id="${mission.id}">
         <label for="answer-input">ヒーロー解放コード</label>
         <input id="answer-input" name="answer" autocomplete="off" placeholder="答えを入力" />
         <div class="quiz-actions">
           <button class="button primary" type="submit" aria-label="回答する">回答する</button>
           ${hints.length ? `<button class="button ghost" type="button" data-action="hint" data-id="${mission.id}" aria-label="ヒントを見る">ヒントを見る</button>` : ""}
-          ${missionWebsiteLinkHtml(mission)}
         </div>
       </form>
       ${hints.length ? `<div class="hint-panel" id="hint-panel">${hintPanelHtml(step, hintCount)}</div>` : ""}
@@ -1277,9 +1277,6 @@ function finalWeakpointMobileHtml() {
         '<div class="final-mobile-parking is-parking"><b>P</b><span>駐車場</span></div>',
         '<div class="final-mobile-parking is-temporary"><b>P</b><span>臨時駐車場</span></div>',
       '</div>',
-      '<span class="final-mobile-down-arrow">↓</span>',
-      '<div class="final-mobile-fold-result"><strong>重ねると見える指示</strong><b>いちにもどり<br>ひらがなよめ</b></div>',
-      '<p class="final-mobile-return">第1問の迷路へ戻る</p>',
     '</div>'
   ].join("");
 }
@@ -1335,7 +1332,6 @@ function finalRpsVisualHtml() {
 function finalWeakpointVisualHtml() {
   const diagram = [
     '<svg class="final-figure-svg final-weakpoint-svg" viewBox="0 0 800 430" preserveAspectRatio="xMidYMid meet" role="img" aria-label="会場パンフレットの駐車場Pと臨時駐車場Pを重ねる手順を示す図">',
-      '<defs><marker id="final-fold-arrow" viewBox="0 0 12 12" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L12,6 L0,12z" fill="#e64036" /></marker></defs>',
       '<rect class="diagram-paper" x="18" y="18" width="764" height="394" rx="4" />',
       '<text class="weakpoint-title" x="52" y="62">会場パンフレットの2つのPを重ねる</text>',
       '<g class="fold-map">',
@@ -1345,10 +1341,6 @@ function finalWeakpointVisualHtml() {
         '<rect x="205" y="118" width="52" height="42" class="map-parking map-parking--temporary" /><text x="223" y="147">P</text>',
         '<text class="map-label" x="83" y="248">駐車場</text><text class="map-label" x="184" y="186">臨時駐車場</text>',
       '</g>',
-      '<path class="fold-arrow" d="M323 184H438M406 151l38 33-38 33" />',
-      '<g class="fold-result"><rect x="468" y="105" width="278" height="144" rx="5" /><text class="fold-result-title" x="500" y="146">重ねると見える指示</text><text class="fold-result-code" x="500" y="192">いちにもどり</text><text class="fold-result-code" x="500" y="222">ひらがなよめ</text></g>',
-      '<path class="fold-next-arrow" d="M604 270V352" marker-end="url(#final-fold-arrow)" />',
-      '<text class="fold-next-label" x="446" y="388">第1問の迷路へ戻る</text>',
     '</svg>'
   ].join("");
   return finalFigureHtml("final-weakpoint-figure", diagram, '<strong>Web版の補助図：</strong>パンフレットが手元にない場合も、Pを重ねて出た指示に従おう。第1問で<strong>経路以外のひらがな</strong>を読み、パンフレットの赤文字を確認する。', finalWeakpointMobileHtml());
@@ -1599,7 +1591,7 @@ function kaijuBattlePuzzleHtml(puzzle, index, status) {
         ? `<div class="kaiju-puzzle-visual equation">日本＝0　カナダ＝3　アメリカ＝2　メキシコ＝0<br /><strong>ジャパン＝？</strong></div>`
         : puzzle.puzzleType === "kaiju-banknote"
           ? `<div class="kaiju-puzzle-visual equation">■×5＝つ　■×10＝し　つ×2＝し</div>`
-          : `<img class="kaiju-field-image" src="assets/puzzles/kaiju-final-grid-pdf.png" width="1191" height="1684" alt="FW、GK、PK、シュートの図形パズル" />`;
+          : `<img class="kaiju-field-image" src="assets/puzzles/kaiju-final-grid-pdf.png" width="1192" height="1450" alt="FW、GK、PKの図形パズル" />`;
   return `
     <section class="battle-question">
       <p class="eyebrow dark">ATTACK CODE ${index + 1} / ${kaijuBattlePuzzles.length}</p>
@@ -1612,7 +1604,7 @@ function kaijuBattlePuzzleHtml(puzzle, index, status) {
         <button class="button primary" type="submit">攻撃する</button>
         <p class="answer-result" id="battle-answer-result"></p>
       </form>
-      ${puzzle.hint ? `<details class="battle-hint"><summary>ヒントを見る</summary><p>${escapeHtml(puzzle.hint)}</p></details>` : ""}
+      ${puzzle.hint ? `<details class="battle-hint"><summary>ヒントを見る</summary><p>${escapeHtml(puzzle.hint)}</p>${puzzle.puzzleType === "kaiju-keyboard" ? `<img class="kaiju-keyboard-hint" src="assets/puzzles/kaiju-keyboard-hint.svg" width="900" height="360" alt="アルファベットキーボードのQWERTY配列" />` : ""}</details>` : ""}
     </section>`;
 }
 
@@ -2172,13 +2164,13 @@ function heroCollectionHtml(mode = "full") {
       const unlocked = state.unlocked.has(mission.id);
       return `
         <article class="hero-slot ${unlocked ? "is-unlocked" : "is-locked"} ${state.recentUnlock === mission.id ? "is-new" : ""}" style="--accent:${mission.accent}">
-          <div class="hero-slot-visual">
+          ${unlocked ? `<a class="hero-slot-visual hero-slot-link" href="#company/${mission.id}" aria-label="${escapeAttribute(mission.heroName)}のプロフィールを見る">` : `<div class="hero-slot-visual">`}
             ${
               unlocked
                 ? characterSvg(mission.character, "hero-slot-character", mission.heroName)
                 : `${missionCharacterHtml(mission, false, "hero-slot-character", "")}<span class="hero-slot-lock">?</span>`
             }
-          </div>
+          ${unlocked ? `</a>` : `</div>`}
           <div class="hero-slot-body">
             <span class="tag status ${unlocked ? "clear" : ""}">${unlocked ? "仲間" : "未解放"}</span>
             <h3>${unlocked ? escapeHtml(mission.heroName) : "???"}</h3>
@@ -2433,21 +2425,17 @@ function puzzleHtml(step) {
           <figure><img src="assets/puzzles/morikawa-video-clue.png" width="1100" height="563" alt="赤い四角がある動画の手がかり画像" /></figure>
           <figure><img src="assets/puzzles/morikawa-circle-clue.png" width="1100" height="667" alt="青い丸と社訓の手がかり画像" /></figure>
         </div>
+        <div class="kanji-cross" aria-label="黄色い三角に入る共通の漢字を探す問題">
+          <span>出<span class="shape triangle yellow" aria-hidden="true"></span> → しゅっ〇〇</span>
+          <span><span class="shape triangle yellow" aria-hidden="true"></span>進 → 〇〇しん</span>
+          <span><span class="shape triangle yellow" aria-hidden="true"></span>見 → 〇〇けん</span>
+          <span><span class="shape triangle yellow" aria-hidden="true"></span>表 → 〇〇ぴょう</span>
+        </div>
         <div class="shape-expression" aria-label="赤い四角 の 青い丸 黄色い三角">
           <span class="shape square red"></span>
           <strong>の</strong>
           <span class="shape circle blue"></span>
           <span class="shape triangle yellow"></span>
-        </div>
-        <div class="seal-hints">
-          <p><span class="shape square red"></span> RECRUIT □OVIE</p>
-          <p><span class="shape circle blue"></span> 公式サイトの社訓から探せ</p>
-        </div>
-        <div class="kanji-cross" aria-label="黄色い三角に入る共通の漢字を探す問題">
-          <span>出△ → しゅっ〇〇</span>
-          <span>△進 → 〇〇しん</span>
-          <span>△見 → 〇〇けん</span>
-          <span>△表 → 〇〇ぴょう</span>
         </div>
       </div>
     `;
