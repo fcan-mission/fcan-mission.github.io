@@ -2779,6 +2779,7 @@ img.mission-character {
   gap: 14px;
   margin: 24px 0;
   padding: 18px;
+  color: var(--ink);
   background: #fffefa;
   border: 2px solid var(--ink);
   box-shadow: var(--shadow);
@@ -2795,6 +2796,8 @@ img.mission-character {
 .final-brief p { margin: 0; font-weight: 850; }
 .final-puzzle-copy h2,
 .final-brief h2 { margin: 0; font-size: clamp(24px, 6vw, 34px); }
+.final-brief h2 { color: #173023; }
+.final-brief p:not(.eyebrow) { color: #344a3d; }
 
 .locked-final-brief { color: var(--muted); background: #eef3ee; }
 .final-brief.is-clear { color: var(--ink); background: #e7f3e4; border-top: 10px solid var(--grass); }
