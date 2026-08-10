@@ -5596,7 +5596,8 @@ img.mission-character {
 
 .battle-hint summary { cursor: pointer; }
 .battle-hint p { margin-top: 8px; }
-.kaiju-keyboard-hint { display: block; width: min(100%, 560px); height: auto; margin: 12px auto 2px; border: 2px solid #173023; border-radius: 10px; }
+.kaiju-keyboard-hint,
+.kaiju-keyboard-reference { display: block; width: min(100%, 560px); height: auto; margin: 12px auto 2px; border: 2px solid #173023; border-radius: 10px; }
 
 .mission-website-entry {
   margin: 18px 0 12px;

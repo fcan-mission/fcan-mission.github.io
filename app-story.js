@@ -7,7 +7,7 @@ import {
   signInWithEmailAndPassword,
   signOut
 } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-auth.js";
-import { collection, deleteDoc, doc, getDoc, getDocs, getFirestore, serverTimestamp, setDoc } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js";
+import { collection, doc, getDoc, getDocs, getFirestore, serverTimestamp, setDoc } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js";
 import { firebaseConfig } from "./firebase-config.js";
 
 const missions = [
@@ -322,7 +322,7 @@ const missions = [
     questionTitle: "やすらぎのルームキー",
     questionLead: "函館の海を生かした、非日常のリラックス空間に残る記録を集めよう。",
     questionBody: "ホテルの魅力と朝食の謎を解き、回復の合言葉を復元しよう。",
-    acceptedAnswers: ["食事", "しょくじ", "ショクジ"],
+    acceptedAnswers: ["食事", "しょくじ", "しよくじ", "ショクジ", "シヨクジ"],
     hints: [
       "相方から追加通信が届いた。港町の景色と、ホテルの過ごし方に注目しよう。",
       "ヒーローの記憶が少し復元された。海や船をテーマにした非日常の空間が鍵だ。",
@@ -371,7 +371,7 @@ const missions = [
         },
         lead: "函館の海鮮や北海道の食材にこだわるホテルの力を呼び起こそう。",
         body: "問題2　さ＋1　ろ－5　お＋3　ぞ－3　〇〇〇〇",
-        acceptedAnswers: ["食事", "しょくじ", "ショクジ"],
+        acceptedAnswers: ["食事", "しょくじ", "しよくじ", "ショクジ", "シヨクジ"],
         hints: ["＋と－は50音順で進む向きです。", "さの1つ次は『し』、ろの5つ前は『よ』。", "答えは『しょくじ』。"],
         clearMessage: "朝食の合言葉を取得。マリーナ・ヒーラーの回復の力が再起動した！",
         puzzleType: "century-meal"
@@ -776,6 +776,8 @@ function render() {
   if (route.name !== "clear") clearBattleTimer();
   setCurrentNav(route.name);
 
+  if (["mission", "clear"].includes(route.name) && !hasMissionAccess()) return renderAccessRequired();
+
   if (route.name === "home") return renderTemplate("home-template");
   if (route.name === "profile") return renderProfile();
   if (route.name === "admin") return renderAdmin();
@@ -788,6 +790,22 @@ function render() {
   if (route.name === "clear") return renderClear();
 
   location.hash = "#home";
+}
+
+function hasMissionAccess() {
+  return Boolean(firebaseEnabled && currentUser && state.participant);
+}
+
+function renderAccessRequired() {
+  renderTemplate("profile-template");
+  document.querySelector("#profile-view").innerHTML = `
+    <article class="ticket-profile">
+      <p class="eyebrow dark">MISSION ACCESS REQUIRED</p>
+      <h2>参加受付を完了してください</h2>
+      <p>問題に挑戦するには、ログイン後に作戦参加登録を完了する必要があります。</p>
+      <a class="button primary" href="#profile">参加受付・ログインへ</a>
+    </article>
+  `;
 }
 
 function parseRoute() {
@@ -849,6 +867,7 @@ function renderProfile() {
         <div><dt>学年</dt><dd>${escapeHtml(state.participant.grade)}</dd></div>
         <div><dt>興味分野</dt><dd>${state.participant.interests.length ? state.participant.interests.map(escapeHtml).join(" / ") : "未選択"}</dd></div>
         <div><dt>クリア</dt><dd>${state.unlocked.size} / ${missions.length} clear</dd></div>
+        <div><dt>ナゾゴラ討伐</dt><dd>${state.participant.kaijuBattleCompletedAt ? "ナゾゴラ討伐完了" : "挑戦中"}</dd></div>
       </dl>
       <div class="profile-progress" aria-label="進行状況">
         <strong>${state.unlocked.size} / ${missions.length}</strong>
@@ -860,7 +879,6 @@ function renderProfile() {
       </div>
       <div class="interest-row">
         <button class="button ghost" type="button" data-action="edit-profile" aria-label="登録内容を編集">登録内容を編集</button>
-        <button class="button ghost danger" type="button" data-action="delete-profile" aria-label="受付情報を削除">受付情報を削除</button>
         <button class="button ghost" type="button" data-action="sign-out">ログアウト</button>
       </div>
       <p class="privacy-note">登録情報はイベント運営、進行状況の管理、企業への関心の集計にのみ使用します。削除を希望する場合は運営へお問い合わせください。</p>
@@ -991,7 +1009,7 @@ function renderMission(id) {
       ${missionDialogueHtml(step.dialogue)}
       ${puzzleHtml(step)}
       <p><strong>問題:</strong> ${escapeHtml(step.body)}</p>
-      ${stepIndex === 0 ? `<div class="mission-website-entry">${missionWebsiteLinkHtml(mission)}</div>` : ""}
+      <div class="mission-website-entry">${missionWebsiteLinkHtml(mission)}</div>
       <form id="answer-form" data-id="${mission.id}">
         <label for="answer-input">ヒーロー解放コード</label>
         <input id="answer-input" name="answer" autocomplete="off" placeholder="答えを入力" />
@@ -1541,7 +1559,7 @@ function kaijuCompletionRecordHtml() {
   if (state.participant?.kaijuBattleCompletedAt) {
     return `<aside class="final-brief is-clear"><p class="eyebrow dark">COMPLETION RECORDED</p><h2>討伐記録を保存しました</h2><p>${escapeHtml(state.participant.name || "参加者")}さんのニックネーム・メールアドレス・討伐完了時刻を運営用に記録しています。</p></aside>`;
   }
-  return `<aside class="final-brief"><p class="eyebrow dark">SAVE YOUR RESULT</p><h2>討伐記録を残そう</h2><p>ニックネームとメールアドレスを登録すると、討伐完了を運営が記録できます。</p><a class="button primary" href="#profile">参加登録・ログインへ</a></aside>`;
+  return `<aside class="final-brief"><p class="eyebrow dark">COMPLETION SAVING</p><h2>討伐記録を保存中です</h2><p>ナゾゴラ討伐完了の記録を作戦参加証へ反映しています。</p></aside>`;
 }
 
 function kaijuBattlePuzzleHtml(puzzle, index, status) {
@@ -1557,7 +1575,7 @@ function kaijuBattlePuzzleHtml(puzzle, index, status) {
         ? `<div class="kaiju-puzzle-visual equation">日本＝0　カナダ＝3　アメリカ＝2　メキシコ＝0<br /><strong>ジャパン＝？</strong></div>`
         : puzzle.puzzleType === "kaiju-banknote"
           ? `<div class="kaiju-puzzle-visual equation">■×5＝つ　■×10＝し　つ×2＝し</div>`
-          : `<img class="kaiju-field-image" src="assets/puzzles/kaiju-final-grid-pdf.png" width="1192" height="1450" alt="FW、GK、PKの図形パズル" />`;
+          : `<img class="kaiju-field-image" src="assets/puzzles/kaiju-final-grid-pdf.png" width="1192" height="1450" alt="FW、GK、PKの図形パズル" /><img class="kaiju-keyboard-reference" src="assets/puzzles/kaiju-keyboard-hint.svg" width="900" height="360" alt="英字とかな表記を併記したQWERTYキーボード配列" />`;
   return `
     <section class="battle-question">
       <p class="eyebrow dark">ATTACK CODE ${index + 1} / ${kaijuBattlePuzzles.length}</p>
@@ -1570,7 +1588,7 @@ function kaijuBattlePuzzleHtml(puzzle, index, status) {
         <button class="button primary" type="submit">攻撃する</button>
         <p class="answer-result" id="battle-answer-result"></p>
       </form>
-      ${puzzle.hint ? `<details class="battle-hint"><summary>ヒントを見る</summary><p>${escapeHtml(puzzle.hint)}</p>${puzzle.puzzleType === "kaiju-keyboard" ? `<img class="kaiju-keyboard-hint" src="assets/puzzles/kaiju-keyboard-hint.svg" width="900" height="360" alt="アルファベットキーボードのQWERTY配列" />` : ""}</details>` : ""}
+      ${puzzle.hint ? `<details class="battle-hint"><summary>ヒントを見る</summary><p>${escapeHtml(puzzle.hint)}</p>${puzzle.puzzleType === "kaiju-keyboard" ? `<img class="kaiju-keyboard-hint" src="assets/puzzles/kaiju-keyboard-hint.svg" width="900" height="360" alt="英字とかな表記を併記したQWERTYキーボード配列" />` : ""}</details>` : ""}
     </section>`;
 }
 
@@ -1646,12 +1664,6 @@ function handleDocumentClick(event) {
   if (action === "edit-profile") {
     document.querySelector("#profile-view").innerHTML = registrationFormHtml(state.participant);
   }
-  if (action === "delete-profile" && window.confirm("受付情報と進行状況を運営データベースから削除しますか？この操作は元に戻せません。")) {
-    state.participant = null;
-    localStorage.removeItem(STORAGE_KEYS.participant);
-    if (currentUser && db) deleteDoc(doc(db, "participants", currentUser.uid)).catch((error) => console.error("参加者情報を削除できませんでした。", error));
-    renderProfile();
-  }
   if (action === "sign-out") signOut(auth);
   if (action === "load-participants") loadParticipants();
 }
@@ -1714,7 +1726,7 @@ function showStoryAccessDialog() {
 }
 
 function verifyStoryAccess(form) {
-  const password = new FormData(form).get("password")?.toString().trim();
+  const password = new FormData(form).get("password")?.toString();
   if (password === "fcan") {
     closeStoryAccessDialog();
     location.hash = "#profile";
@@ -1925,6 +1937,12 @@ function recordKaijuCompletion() {
   if (!currentUser || !db || !state.participant?.id || state.participant.kaijuBattleCompletedAt) return;
   state.participant.kaijuBattleCompletedAt = new Date().toISOString();
   localStorage.setItem(STORAGE_KEYS.participant, JSON.stringify(state.participant));
+  setDoc(doc(db, "participants", currentUser.uid), {
+    kaijuBattleCompletedAt: serverTimestamp(),
+    updatedAt: serverTimestamp()
+  }, { merge: true }).catch((error) => {
+    console.error("作戦参加証の討伐記録を保存できませんでした。", error);
+  });
   setDoc(doc(db, "clearers", currentUser.uid), {
     name: state.participant.name || "",
     email: currentUser.email || "",

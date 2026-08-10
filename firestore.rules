@@ -7,11 +7,11 @@ service cloud.firestore {
     match /participants/{userId} {
       allow create: if signedIn() && request.auth.uid == userId
         && request.resource.data.id == userId
-        && request.resource.data.keys().hasOnly(['id', 'name', 'grade', 'interests', 'createdAt', 'updatedAt', 'privacyConsent', 'email', 'progress']);
+        && request.resource.data.keys().hasOnly(['id', 'name', 'grade', 'interests', 'createdAt', 'updatedAt', 'privacyConsent', 'email', 'progress', 'kaijuBattleCompletedAt']);
       allow read: if isAdmin() || (signedIn() && request.auth.uid == userId);
       allow update: if isAdmin() || (signedIn() && request.auth.uid == userId
         && request.resource.data.id == userId
-        && request.resource.data.keys().hasOnly(['id', 'name', 'grade', 'interests', 'createdAt', 'updatedAt', 'privacyConsent', 'email', 'progress']));
+        && request.resource.data.keys().hasOnly(['id', 'name', 'grade', 'interests', 'createdAt', 'updatedAt', 'privacyConsent', 'email', 'progress', 'kaijuBattleCompletedAt']));
       allow delete: if isAdmin() || (signedIn() && request.auth.uid == userId);
     }
 

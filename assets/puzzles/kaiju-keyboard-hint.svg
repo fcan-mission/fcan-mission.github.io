@@ -1,9 +1,43 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 360" role="img" aria-labelledby="title desc">
-  <title id="title">アルファベットキーボード配列</title><desc id="desc">QWERTY配列のアルファベットキーボード</desc>
-  <rect width="900" height="360" rx="28" fill="#183240"/><text x="450" y="57" text-anchor="middle" fill="#fffefa" font-family="sans-serif" font-size="28" font-weight="700">KEYBOARD LAYOUT</text>
-  <g fill="#f9fbfa" stroke="#67d5cf" stroke-width="4" font-family="sans-serif" font-size="30" font-weight="700" text-anchor="middle">
-    <g transform="translate(92 92)"><g><rect width="62" height="62" rx="9"/><text x="31" y="41">Q</text></g><g transform="translate(70)"><rect width="62" height="62" rx="9"/><text x="31" y="41">W</text></g><g transform="translate(140)"><rect width="62" height="62" rx="9"/><text x="31" y="41">E</text></g><g transform="translate(210)"><rect width="62" height="62" rx="9"/><text x="31" y="41">R</text></g><g transform="translate(280)"><rect width="62" height="62" rx="9"/><text x="31" y="41">T</text></g><g transform="translate(350)"><rect width="62" height="62" rx="9"/><text x="31" y="41">Y</text></g><g transform="translate(420)"><rect width="62" height="62" rx="9"/><text x="31" y="41">U</text></g><g transform="translate(490)"><rect width="62" height="62" rx="9"/><text x="31" y="41">I</text></g><g transform="translate(560)"><rect width="62" height="62" rx="9"/><text x="31" y="41">O</text></g><g transform="translate(630)"><rect width="62" height="62" rx="9"/><text x="31" y="41">P</text></g></g>
-    <g transform="translate(126 169)"><g><rect width="62" height="62" rx="9"/><text x="31" y="41">A</text></g><g transform="translate(70)"><rect width="62" height="62" rx="9"/><text x="31" y="41">S</text></g><g transform="translate(140)"><rect width="62" height="62" rx="9"/><text x="31" y="41">D</text></g><g transform="translate(210)"><rect width="62" height="62" rx="9"/><text x="31" y="41">F</text></g><g transform="translate(280)"><rect width="62" height="62" rx="9"/><text x="31" y="41">G</text></g><g transform="translate(350)"><rect width="62" height="62" rx="9"/><text x="31" y="41">H</text></g><g transform="translate(420)"><rect width="62" height="62" rx="9"/><text x="31" y="41">J</text></g><g transform="translate(490)"><rect width="62" height="62" rx="9"/><text x="31" y="41">K</text></g><g transform="translate(560)"><rect width="62" height="62" rx="9"/><text x="31" y="41">L</text></g></g>
-    <g transform="translate(196 246)"><g><rect width="62" height="62" rx="9"/><text x="31" y="41">Z</text></g><g transform="translate(70)"><rect width="62" height="62" rx="9"/><text x="31" y="41">X</text></g><g transform="translate(140)"><rect width="62" height="62" rx="9"/><text x="31" y="41">C</text></g><g transform="translate(210)"><rect width="62" height="62" rx="9"/><text x="31" y="41">V</text></g><g transform="translate(280)"><rect width="62" height="62" rx="9"/><text x="31" y="41">B</text></g><g transform="translate(350)"><rect width="62" height="62" rx="9"/><text x="31" y="41">N</text></g><g transform="translate(420)"><rect width="62" height="62" rx="9"/><text x="31" y="41">M</text></g></g>
+  <title id="title">英字とかなのキーボード配列</title>
+  <desc id="desc">QWERTY配列の各キーに、英字と右下のかな表記を併記したキーボード</desc>
+  <style>
+    .key { fill: #f9fbfa; stroke: #67d5cf; stroke-width: 4; }
+    .en { fill: #183240; font: 700 28px sans-serif; text-anchor: middle; }
+    .ja { fill: #49606c; font: 700 19px sans-serif; text-anchor: middle; }
+  </style>
+  <rect width="900" height="360" rx="28" fill="#183240"/>
+  <text x="450" y="54" text-anchor="middle" fill="#fffefa" font-family="sans-serif" font-size="26" font-weight="700">KEYBOARD LAYOUT / 英字・かな</text>
+  <g transform="translate(92 84)">
+    <g transform="translate(0)"><rect class="key" width="62" height="66" rx="9"/><text class="en" x="31" y="34">Q</text><text class="ja" x="45" y="56">た</text></g>
+    <g transform="translate(70)"><rect class="key" width="62" height="66" rx="9"/><text class="en" x="31" y="34">W</text><text class="ja" x="45" y="56">て</text></g>
+    <g transform="translate(140)"><rect class="key" width="62" height="66" rx="9"/><text class="en" x="31" y="34">E</text><text class="ja" x="45" y="56">い</text></g>
+    <g transform="translate(210)"><rect class="key" width="62" height="66" rx="9"/><text class="en" x="31" y="34">R</text><text class="ja" x="45" y="56">す</text></g>
+    <g transform="translate(280)"><rect class="key" width="62" height="66" rx="9"/><text class="en" x="31" y="34">T</text><text class="ja" x="45" y="56">か</text></g>
+    <g transform="translate(350)"><rect class="key" width="62" height="66" rx="9"/><text class="en" x="31" y="34">Y</text><text class="ja" x="45" y="56">ん</text></g>
+    <g transform="translate(420)"><rect class="key" width="62" height="66" rx="9"/><text class="en" x="31" y="34">U</text><text class="ja" x="45" y="56">な</text></g>
+    <g transform="translate(490)"><rect class="key" width="62" height="66" rx="9"/><text class="en" x="31" y="34">I</text><text class="ja" x="45" y="56">に</text></g>
+    <g transform="translate(560)"><rect class="key" width="62" height="66" rx="9"/><text class="en" x="31" y="34">O</text><text class="ja" x="45" y="56">ら</text></g>
+    <g transform="translate(630)"><rect class="key" width="62" height="66" rx="9"/><text class="en" x="31" y="34">P</text><text class="ja" x="45" y="56">せ</text></g>
+  </g>
+  <g transform="translate(127 161)">
+    <g transform="translate(0)"><rect class="key" width="62" height="66" rx="9"/><text class="en" x="31" y="34">A</text><text class="ja" x="45" y="56">ち</text></g>
+    <g transform="translate(70)"><rect class="key" width="62" height="66" rx="9"/><text class="en" x="31" y="34">S</text><text class="ja" x="45" y="56">と</text></g>
+    <g transform="translate(140)"><rect class="key" width="62" height="66" rx="9"/><text class="en" x="31" y="34">D</text><text class="ja" x="45" y="56">し</text></g>
+    <g transform="translate(210)"><rect class="key" width="62" height="66" rx="9"/><text class="en" x="31" y="34">F</text><text class="ja" x="45" y="56">は</text></g>
+    <g transform="translate(280)"><rect class="key" width="62" height="66" rx="9"/><text class="en" x="31" y="34">G</text><text class="ja" x="45" y="56">き</text></g>
+    <g transform="translate(350)"><rect class="key" width="62" height="66" rx="9"/><text class="en" x="31" y="34">H</text><text class="ja" x="45" y="56">く</text></g>
+    <g transform="translate(420)"><rect class="key" width="62" height="66" rx="9"/><text class="en" x="31" y="34">J</text><text class="ja" x="45" y="56">ま</text></g>
+    <g transform="translate(490)"><rect class="key" width="62" height="66" rx="9"/><text class="en" x="31" y="34">K</text><text class="ja" x="45" y="56">の</text></g>
+    <g transform="translate(560)"><rect class="key" width="62" height="66" rx="9"/><text class="en" x="31" y="34">L</text><text class="ja" x="45" y="56">り</text></g>
+  </g>
+  <g transform="translate(197 238)">
+    <g transform="translate(0)"><rect class="key" width="62" height="66" rx="9"/><text class="en" x="31" y="34">Z</text><text class="ja" x="45" y="56">つ</text></g>
+    <g transform="translate(70)"><rect class="key" width="62" height="66" rx="9"/><text class="en" x="31" y="34">X</text><text class="ja" x="45" y="56">さ</text></g>
+    <g transform="translate(140)"><rect class="key" width="62" height="66" rx="9"/><text class="en" x="31" y="34">C</text><text class="ja" x="45" y="56">そ</text></g>
+    <g transform="translate(210)"><rect class="key" width="62" height="66" rx="9"/><text class="en" x="31" y="34">V</text><text class="ja" x="45" y="56">ひ</text></g>
+    <g transform="translate(280)"><rect class="key" width="62" height="66" rx="9"/><text class="en" x="31" y="34">B</text><text class="ja" x="45" y="56">こ</text></g>
+    <g transform="translate(350)"><rect class="key" width="62" height="66" rx="9"/><text class="en" x="31" y="34">N</text><text class="ja" x="45" y="56">み</text></g>
+    <g transform="translate(420)"><rect class="key" width="62" height="66" rx="9"/><text class="en" x="31" y="34">M</text><text class="ja" x="45" y="56">も</text></g>
   </g>
 </svg>
