@@ -699,6 +699,7 @@ const STORAGE_KEYS = {
   steps: "fcan.steps",
   final: "fcan.finalUnlocked"
 };
+const STORY_ACCESS_KEY = "fcan.storyAccess";
 
 // 5人のヒーローを集めた後に、怪獣の弱点を探す最終暗号を解放する。
 const FINAL_BATTLE_TEST_MODE = false;
@@ -779,7 +780,10 @@ function render() {
   if (["mission", "clear"].includes(route.name) && !hasMissionAccess()) return renderAccessRequired();
 
   if (route.name === "home") return renderTemplate("home-template");
-  if (route.name === "profile") return renderProfile();
+  if (route.name === "profile") {
+    if (!hasStoryAccess()) return renderStoryAccessRequired();
+    return renderProfile();
+  }
   if (route.name === "admin") return renderAdmin();
   if (route.name === "story") return renderTemplate("story-template", storyAnchorId(route.id));
   if (route.name === "story-call") return renderTemplate("story-template", "story-call");
@@ -796,6 +800,15 @@ function hasMissionAccess() {
   return Boolean(firebaseEnabled && currentUser && state.participant);
 }
 
+function hasStoryAccess() {
+  return sessionStorage.getItem(STORY_ACCESS_KEY) === "granted";
+}
+
+function renderStoryAccessRequired() {
+  renderTemplate("home-template");
+  requestAnimationFrame(showStoryAccessDialog);
+}
+
 function renderAccessRequired() {
   renderTemplate("profile-template");
   document.querySelector("#profile-view").innerHTML = `
@@ -803,7 +816,7 @@ function renderAccessRequired() {
       <p class="eyebrow dark">MISSION ACCESS REQUIRED</p>
       <h2>参加受付を完了してください</h2>
       <p>問題に挑戦するには、ログイン後に作戦参加登録を完了する必要があります。</p>
-      <a class="button primary" href="#profile">参加受付・ログインへ</a>
+      <button class="button primary" type="button" data-action="start-story">参加受付・ログインへ</button>
     </article>
   `;
 }
@@ -1700,6 +1713,10 @@ function handleSubmit(event) {
 }
 
 function showStoryAccessDialog() {
+  if (hasStoryAccess()) {
+    location.hash = "#profile";
+    return;
+  }
   document.querySelector(".story-access-modal")?.remove();
   const modal = el("div", "story-access-modal");
   modal.setAttribute("role", "dialog");
@@ -1728,6 +1745,7 @@ function showStoryAccessDialog() {
 function verifyStoryAccess(form) {
   const password = new FormData(form).get("password")?.toString();
   if (password === "fcan") {
+    sessionStorage.setItem(STORY_ACCESS_KEY, "granted");
     closeStoryAccessDialog();
     location.hash = "#profile";
     return;
