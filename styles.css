@@ -7083,6 +7083,29 @@ img.mission-character {
   margin-top: 16px;
 }
 
+.final-weakpoint-hint-image {
+  margin: 16px 0 0;
+  padding: 10px;
+  background: #fff;
+  border: 2px solid var(--ink);
+}
+
+.final-weakpoint-hint-image img {
+  display: block;
+  width: 100%;
+  max-width: 505px;
+  height: auto;
+  margin: 0 auto;
+}
+
+.final-weakpoint-hint-image figcaption {
+  margin-top: 8px;
+  color: var(--muted);
+  font-size: .9rem;
+  font-weight: 700;
+  text-align: center;
+}
+
 .hint-empty,
 .hint-meter {
   margin: 0;

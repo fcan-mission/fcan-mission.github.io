@@ -1349,7 +1349,10 @@ function getFinalHintCount(index) {
 function finalHintPanelHtml(puzzle, count) {
   const hints = getPdfHints(puzzle);
   if (!count) return `<p class="hint-empty">PDFの手がかりは、ボタンを押すと表示されます。</p>`;
-  return `<div class="hint-meter">HINT ${count}/${hints.length}</div>${hints.slice(0, count).map((hint, hintIndex) => `<p class="hint is-visible"><strong>${hintIndex + 1}.</strong> ${escapeHtml(hint)}</p>`).join("")}`;
+  const imageHint = puzzle.puzzleType === "final-weakpoint"
+    ? `<figure class="final-weakpoint-hint-image"><img src="assets/puzzles/final-weakpoint-maze-hint.png" width="505" height="359" alt="スタートからゴールまでの迷路と、道沿いに配置された文字" /><figcaption>第1問の迷路をもう一度確認しよう。</figcaption></figure>`
+    : "";
+  return `<div class="hint-meter">HINT ${count}/${hints.length}</div>${hints.slice(0, count).map((hint, hintIndex) => `<p class="hint is-visible"><strong>${hintIndex + 1}.</strong> ${escapeHtml(hint)}</p>`).join("")}${imageHint}`;
 }
 
 function renderFinalBattle(battleReady) {
