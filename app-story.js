@@ -637,7 +637,10 @@ const kaijuBattlePuzzles = [
     title: "第5問 フィールドパズル",
     body: "FW・GK・PKの図形を読み解き、最後の攻撃コードを入力しよう。",
     acceptedAnswers: ["シュート", "しゅーと", "shoot"],
-    hint: "ｄ８ーｓは変だからキーボードで別の入力方法を考えよう！",
+    hints: [
+      { image: "assets/puzzles/kaiju-keyboard-hint.svg", alt: "英字とかな表記を併記したQWERTYキーボード配列" },
+      { text: "ｄ８ーｓは変だからキーボードで別の入力方法を考えよう！" }
+    ],
     explanation: "PDFの図形をFW・GK・PKの位置関係に当てはめると、最後の攻撃コードは「シュート」になります。",
     damage: 20,
     puzzleType: "kaiju-field"
@@ -1591,7 +1594,7 @@ function kaijuBattlePuzzleHtml(puzzle, index, status) {
         ? `<div class="kaiju-puzzle-visual equation">日本＝0　カナダ＝3　アメリカ＝2　メキシコ＝0<br /><strong>ジャパン＝？</strong></div>`
         : puzzle.puzzleType === "kaiju-banknote"
           ? `<div class="kaiju-puzzle-visual equation">■×5＝つ　■×10＝し　つ×2＝し</div>`
-          : `<img class="kaiju-field-image" src="assets/puzzles/kaiju-final-grid-pdf.png" width="1192" height="1450" alt="FW、GK、PKの図形パズル" /><img class="kaiju-keyboard-reference" src="assets/puzzles/kaiju-keyboard-hint.svg" width="900" height="360" alt="英字とかな表記を併記したQWERTYキーボード配列" />`;
+          : `<img class="kaiju-field-image" src="assets/puzzles/kaiju-final-grid-pdf.png" width="1192" height="1450" alt="FW、GK、PKの図形パズル" />`;
   return `
     <section class="battle-question">
       <p class="eyebrow dark">ATTACK CODE ${index + 1} / ${kaijuBattlePuzzles.length}</p>
@@ -1604,8 +1607,16 @@ function kaijuBattlePuzzleHtml(puzzle, index, status) {
         <button class="button primary" type="submit">攻撃する</button>
         <p class="answer-result" id="battle-answer-result"></p>
       </form>
-      ${puzzle.hint ? `<details class="battle-hint"><summary>ヒントを見る</summary><p>${escapeHtml(puzzle.hint)}</p>${puzzle.puzzleType === "kaiju-keyboard" ? `<img class="kaiju-keyboard-hint" src="assets/puzzles/kaiju-keyboard-hint.svg" width="900" height="360" alt="英字とかな表記を併記したQWERTYキーボード配列" />` : ""}</details>` : ""}
+      ${battleHintHtml(puzzle)}
     </section>`;
+}
+
+function battleHintHtml(puzzle) {
+  if (puzzle.hints?.length) {
+    return `<details class="battle-hint"><summary>ヒントを見る</summary>${puzzle.hints.map((hint, index) => `<p><strong>ヒント${index + 1}</strong>${hint.text ? `：${escapeHtml(hint.text)}` : ""}</p>${hint.image ? `<img class="kaiju-keyboard-hint" src="${hint.image}" width="900" height="360" alt="${escapeAttribute(hint.alt || "ヒント画像")}" />` : ""}`).join("")}</details>`;
+  }
+  if (!puzzle.hint) return "";
+  return `<details class="battle-hint"><summary>ヒントを見る</summary><p>${escapeHtml(puzzle.hint)}</p>${puzzle.puzzleType === "kaiju-keyboard" ? `<img class="kaiju-keyboard-hint" src="assets/puzzles/kaiju-keyboard-hint.svg" width="900" height="360" alt="英字とかな表記を併記したQWERTYキーボード配列" />` : ""}</details>`;
 }
 
 function startKaijuBattle() {
