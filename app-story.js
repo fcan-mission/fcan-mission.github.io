@@ -1589,7 +1589,7 @@ function kaijuBattlePuzzleHtml(puzzle, index, status) {
   const visual = puzzle.puzzleType === "kaiju-keyboard"
     ? `<div class="kaiju-puzzle-visual cipher"><span>nazotoki</span><b>→</b><span>msxpyplo</span><span>？</span><b>→</b><span>dpvvrt</span></div>`
     : puzzle.puzzleType === "kaiju-bib"
-      ? `<div class="kaiju-puzzle-visual bibs"><span>あ<small>1</small></span><span>？<small>2</small></span><span>ざ<small>3</small></span><span>？<small>4</small></span></div>`
+      ? `<img class="kaiju-bib-image" src="assets/puzzles/kaiju-bib-question.png" width="384" height="155" alt="ア、？、ザ、？と2、3、5、6が書かれた4枚のビブス" />`
       : puzzle.puzzleType === "kaiju-vowel"
         ? `<div class="kaiju-puzzle-visual equation">日本＝0　カナダ＝3　アメリカ＝2　メキシコ＝0<br /><strong>ジャパン＝？</strong></div>`
         : puzzle.puzzleType === "kaiju-banknote"
