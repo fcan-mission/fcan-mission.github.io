@@ -4,7 +4,7 @@
 
 ## 初回設定
 
-1. GitHub のリポジトリ `momiyamakento/Fkyanp` を開く。
+1. GitHub のリポジトリ `fcan-mission/fcan-mission.github.io` を開く。
 2. `Settings` > `Pages` を開く。
 3. `Build and deployment` の `Source` で `GitHub Actions` を選ぶ。
 4. ローカルで変更をコミットして `main` に push する。
@@ -15,7 +15,7 @@
 通常は次の URL で公開されます。
 
 ```text
-https://momiyamakento.github.io/Fkyanp/
+https://fcan-mission.github.io/
 ```
 
 反映には数分かかることがあります。

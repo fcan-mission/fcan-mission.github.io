@@ -702,8 +702,6 @@ const STORAGE_KEYS = {
   steps: "fcan.steps",
   final: "fcan.finalUnlocked"
 };
-const STORY_ACCESS_KEY = "fcan.storyAccess";
-
 // 5人のヒーローを集めた後に、怪獣の弱点を探す最終暗号を解放する。
 const FINAL_BATTLE_TEST_MODE = false;
 const DIRECT_KAIJU_BATTLE_MODE = false;
@@ -783,10 +781,7 @@ function render() {
   if (["mission", "clear"].includes(route.name) && !hasMissionAccess()) return renderAccessRequired();
 
   if (route.name === "home") return renderTemplate("home-template");
-  if (route.name === "profile") {
-    if (!hasStoryAccess()) return renderStoryAccessRequired();
-    return renderProfile();
-  }
+  if (route.name === "profile") return renderProfile();
   if (route.name === "admin") return renderAdmin();
   if (route.name === "story") return renderTemplate("story-template", storyAnchorId(route.id));
   if (route.name === "story-call") return renderTemplate("story-template", "story-call");
@@ -803,15 +798,6 @@ function hasMissionAccess() {
   return Boolean(firebaseEnabled && currentUser && state.participant);
 }
 
-function hasStoryAccess() {
-  return sessionStorage.getItem(STORY_ACCESS_KEY) === "granted";
-}
-
-function renderStoryAccessRequired() {
-  renderTemplate("home-template");
-  requestAnimationFrame(showStoryAccessDialog);
-}
-
 function renderAccessRequired() {
   renderTemplate("profile-template");
   document.querySelector("#profile-view").innerHTML = `
@@ -819,7 +805,7 @@ function renderAccessRequired() {
       <p class="eyebrow dark">MISSION ACCESS REQUIRED</p>
       <h2>参加受付を完了してください</h2>
       <p>問題に挑戦するには、ログイン後に作戦参加登録を完了する必要があります。</p>
-      <button class="button primary" type="button" data-action="start-story">参加受付・ログインへ</button>
+      <a class="button primary" href="#profile">参加受付・ログインへ</a>
     </article>
   `;
 }
@@ -1677,8 +1663,10 @@ function handleDocumentClick(event) {
   if (action === "close-unlock") return closeHeroUnlock();
   if (action === "replay-unlock-video") return replayUnlockVideo(target);
   if (action === "continue-after-clear") return continueAfterClear();
-  if (action === "start-story") return showStoryAccessDialog();
-  if (action === "close-story-access") return closeStoryAccessDialog();
+  if (action === "start-story") {
+    location.hash = "#profile";
+    return;
+  }
   if (action === "start-battle" || action === "replay-battle") return startFinalBattle();
   if (action === "skip-battle") return finishBattle();
   if (action === "start-kaiju-battle") return startKaijuBattle();
@@ -1720,58 +1708,6 @@ function handleSubmit(event) {
     event.preventDefault();
     checkKaijuBattleAnswer(Number(event.target.dataset.step), new FormData(event.target).get("answer"));
   }
-  if (event.target.id === "story-access-form") {
-    event.preventDefault();
-    verifyStoryAccess(event.target);
-  }
-}
-
-function showStoryAccessDialog() {
-  if (hasStoryAccess()) {
-    location.hash = "#profile";
-    return;
-  }
-  document.querySelector(".story-access-modal")?.remove();
-  const modal = el("div", "story-access-modal");
-  modal.setAttribute("role", "dialog");
-  modal.setAttribute("aria-modal", "true");
-  modal.setAttribute("aria-labelledby", "story-access-title");
-  modal.innerHTML = `
-    <article class="story-access-card">
-      <p class="eyebrow dark">MISSION ACCESS</p>
-      <h2 id="story-access-title">合言葉を入力</h2>
-      <p>参加受付・ログイン画面へ進むには、運営から案内された合言葉を入力してください。</p>
-      <form id="story-access-form">
-        <label for="story-access-password">合言葉</label>
-        <input id="story-access-password" name="password" type="password" autocomplete="off" required />
-        <p class="form-error" id="story-access-error" role="alert" hidden></p>
-        <div class="story-access-actions">
-          <button class="button primary" type="submit">認証する</button>
-          <button class="button ghost" type="button" data-action="close-story-access">キャンセル</button>
-        </div>
-      </form>
-    </article>
-  `;
-  document.body.append(modal);
-  modal.querySelector("input")?.focus();
-}
-
-function verifyStoryAccess(form) {
-  const password = new FormData(form).get("password")?.toString();
-  if (password === "fcan") {
-    sessionStorage.setItem(STORY_ACCESS_KEY, "granted");
-    closeStoryAccessDialog();
-    location.hash = "#profile";
-    return;
-  }
-  const error = form.querySelector("#story-access-error");
-  error.textContent = "合言葉が違います。もう一度入力してください。";
-  error.hidden = false;
-  form.querySelector("input")?.focus();
-}
-
-function closeStoryAccessDialog() {
-  document.querySelector(".story-access-modal")?.remove();
 }
 
 function revealHint(id) {
